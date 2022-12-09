@@ -20,6 +20,7 @@ members = ["crates/*"]
 [workspace.package]
 edition = "2021"
 authors = ["just-do-halee <just.do.halee@gmail.com>"]
+description = "Stdto provides a set of functional traits for conversion between various data representations."
 categories = ["development-tools", "data-structures", "rust-patterns"]
 keywords = ["stdto", "to", "serde", "bytes", "data-structures"]
 homepage = "https://github.com/just-do-halee/stdto"
