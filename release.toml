@@ -1,0 +1,11 @@
+pre-release-commit-message = "{{crate_name}} {{version}}"
+tag-message = "{{tag_name}}"
+tag-name = "{{prefix}}v{{version}}"
+pre-release-replacements = [
+    { file = "README.md", search = "director = \".*\"", replace = "director = \"{{version}}\"", exactly = 1 },
+    { file = "CHANGELOG.md", search = "unreleased", replace = "{{version}}", min = 1 },
+    { file = "CHANGELOG.md", search = "\\.\\.\\.HEAD", replace = "...{{tag_name}}", exactly = 1 },
+    { file = "CHANGELOG.md", search = "ReleaseDate", replace = "{{date}}", min = 1 },
+    { file = "CHANGELOG.md", search = "<!-- next-header -->", replace = "<!-- next-header -->\n\n## [unreleased] - ReleaseDate\n", exactly = 1 },
+    { file = "CHANGELOG.md", search = "<!-- next-url -->", replace = "<!-- next-url -->\n\n[unreleased]: https://github.com/just-do-halee/director/compare/{{tag_name}}...HEAD", exactly = 1 },
+]

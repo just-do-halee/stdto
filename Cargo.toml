@@ -1,0 +1,36 @@
+
+[package]
+name = "stdto"
+version = "0.1.0"
+edition = "2021"
+authors = ["just-do-halee <just.do.halee@gmail.com>"]
+categories = ["development-tools", "data-structures", "rust-patterns"]
+keywords = ["stdto", "to", "serde", "bytes", "data-structures"]
+description = "Stdto provides a set of functional traits for conversion between various data representations."
+homepage = "https://github.com/just-do-halee/stdto"
+repository = "https://github.com/just-do-halee/stdto"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+
+exclude = ["RELEASE.md", "release.toml", ".gitignore", ".github/", "crates/"]
+
+[workspace]
+members = ["crates/*"]
+
+[workspace.package]
+edition = "2021"
+authors = ["just-do-halee <just.do.halee@gmail.com>"]
+categories = ["development-tools", "data-structures", "rust-patterns"]
+keywords = ["stdto", "to", "serde", "bytes", "data-structures"]
+homepage = "https://github.com/just-do-halee/stdto"
+repository = "https://github.com/just-do-halee/stdto"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+
+[dependencies]
+stdto_core = { version = "0.1", path = "crates/stdto_core" }
+stdto_derive = { version = "0.1", path = "crates/stdto_derive" }
+
+[features]
+default = ["derive"]
+derive = []
