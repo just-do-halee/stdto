@@ -2,6 +2,9 @@ use std::{collections::HashMap, error::Error, io::Cursor};
 
 use stdto::ToBytes;
 
+// #[stdto::serde]
+// #[derive(ToBytes)]
+// same as
 #[stdto::bytes]
 struct Test {
     a: u32,
@@ -22,21 +25,23 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut bytes: Vec<u8>;
 
-    bytes = origin.try_to_bytes()?;
-    Test::try_from_bytes(&bytes)?;
-
     bytes = origin.to_bytes();
     Test::from_bytes(&bytes);
 
     bytes.clear();
 
-    origin.try_to_bytes_into(&mut bytes)?;
-    Test::try_from_bytes_into(&mut Cursor::new(&bytes))?;
+    bytes = origin.try_to_bytes()?;
+    Test::try_from_bytes(&bytes)?;
 
     bytes.clear();
 
     origin.to_bytes_into(&mut bytes);
-    Test::from_bytes_into(&mut Cursor::new(&bytes));
+    Test::from_bytes_from(&mut Cursor::new(&bytes));
+
+    bytes.clear();
+
+    origin.try_to_bytes_into(&mut bytes)?;
+    Test::try_from_bytes_from(&mut Cursor::new(&bytes))?;
 
     Ok(())
 }

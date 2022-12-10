@@ -21,6 +21,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "cfg-if"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
+
+[[package]]
+name = "cpufeatures"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "28d997bd5e24a5928dd43e46dc529867e207907fe0b239c3477d924f7f2ca320"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "crypto-common"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -61,6 +76,12 @@ name = "itoa"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4217ad341ebadf8d8e724e264f13e593e0648f5b3e94b3896a5df283be015ecc"
+
+[[package]]
+name = "libc"
+version = "0.2.138"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "db6d7e329c562c5dfab7a46a2afabc8b987ab9a4834c9d1ca04dc54c1546cef8"
 
 [[package]]
 name = "proc-macro2"
@@ -118,28 +139,41 @@ dependencies = [
 ]
 
 [[package]]
-name = "stdto"
-version = "0.1.0"
+name = "sha2"
+version = "0.10.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "82e6b795fe2e3b1e845bafcb27aa35405c4d47cdfc92af5fc8d3002f76cebdc0"
 dependencies = [
+ "cfg-if",
+ "cpufeatures",
+ "digest",
+]
+
+[[package]]
+name = "stdto"
+version = "0.2.0"
+dependencies = [
+ "sha2",
  "stdto_core",
  "stdto_derive",
 ]
 
 [[package]]
 name = "stdto_core"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "bincode",
  "digest",
  "serde",
  "serde_json",
+ "sha2",
  "stdto_derive",
  "thiserror",
 ]
 
 [[package]]
 name = "stdto_derive"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "heck",
  "quote",
