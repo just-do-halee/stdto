@@ -2,10 +2,7 @@ use std::{collections::HashMap, error::Error, io::Cursor};
 
 use stdto::ToBytes;
 
-// #[stdto::serde]
-// #[derive(ToBytes)]
-// same as
-#[stdto::bytes]
+#[stdto::bytes(endian = "little")]
 struct Test {
     a: u32,
     b: String,

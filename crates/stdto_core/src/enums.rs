@@ -2,8 +2,17 @@
 
 use core::fmt;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Default, Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Endian {
+    Big,
+    #[default]
+    Little,
+    Native,
+}
+
+#[derive(Default, Debug, Clone, Copy, PartialEq, Eq)]
 pub enum HexMode {
+    #[default]
     Lower,
     Upper,
     Lower0x,

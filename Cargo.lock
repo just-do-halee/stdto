@@ -167,7 +167,6 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
- "stdto_derive",
  "thiserror",
 ]
 

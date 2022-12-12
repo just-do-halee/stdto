@@ -36,9 +36,10 @@ stdto_derive = { version = "0.2", path = "crates/stdto_derive" }
 sha2 = "0.10"
 
 [features]
-default = ["derive", "hex", "bytes", "hash", "json"]
+default = ["derive", "serde", "bytes", "hash", "json", "hex"]
 derive = []
-bytes = []
+serde = []
+bytes = ["serde"]
 hash = ["bytes"]
 json = []
 hex = []

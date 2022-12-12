@@ -25,6 +25,7 @@ stdto = "0.2.0"
 ## **`How to`**
 
 ```rust
+// #[stdto::bytes(endian = "little")]
 #[stdto::bytes]
 struct Test {
     a: u32,
@@ -49,11 +50,11 @@ test.to_hash::<Sha256>();
 ```
 
 ```rust
-hex = whatever.to_hex();
-Vec::<u8>::from_hex(hex);
-```
+// AsRef<u8> to hex
 
-```rust
+hex = bytes.to_hex();
+Vec::<u8>::from_hex(hex);
+
 let mut arr = [0u8; 32];
 arr.copy_from_hex(hex);
 ```

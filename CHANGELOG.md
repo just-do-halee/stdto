@@ -2,6 +2,14 @@
 
 ## [unreleased] - ReleaseDate
 
+## BREAKING CHANGES
+
+- Renamed the methods in `ToBytes` and Added the const ToBytesOptions.
+- Re-design [features].
+
+## Added
+
+- Added an attribute #[stdto::bytes(endian = "...")]. (little/big/native)
 
 ## [0.2.0] - 2022-12-10
 
