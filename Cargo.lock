@@ -151,7 +151,7 @@ dependencies = [
 
 [[package]]
 name = "stdto"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "sha2",
  "stdto_core",
@@ -160,7 +160,7 @@ dependencies = [
 
 [[package]]
 name = "stdto_core"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "bincode",
  "digest",
@@ -172,7 +172,7 @@ dependencies = [
 
 [[package]]
 name = "stdto_derive"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "heck",
  "quote",

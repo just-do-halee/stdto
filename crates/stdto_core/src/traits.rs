@@ -533,7 +533,7 @@ pub trait ToHex: AsRef<[u8]> {
     }
 }
 
-/// # A trait for creating [`Vec<u8>`] from [`AsRef<[u8]>`]
+/// # A trait for creating [`Vec<u8>`] from `AsRef<[u8]>`
 pub trait ToBytesForRef: AsRef<[u8]> {
     fn to_bytes(&self) -> Vec<u8> {
         self.as_ref().to_vec()

@@ -1,7 +1,7 @@
 
 [package]
 name = "stdto"
-version = "0.4.0"
+version = "0.5.0"
 edition = "2021"
 authors = ["just-do-halee <just.do.halee@gmail.com>"]
 categories = ["development-tools", "rust-patterns", "encoding", "parsing-tools"]
@@ -29,8 +29,8 @@ license = "MIT OR Apache-2.0"
 readme = "README.md"
 
 [dependencies]
-stdto_core = { version = "0.4", path = "crates/stdto_core", default-features = false, optional = true }
-stdto_derive = { version = "0.4", path = "crates/stdto_derive", optional = true }
+stdto_core = { version = "0.5", path = "crates/stdto_core", default-features = false, optional = true }
+stdto_derive = { version = "0.5", path = "crates/stdto_derive", optional = true }
 
 [dev-dependencies]
 sha2 = "0.10"
