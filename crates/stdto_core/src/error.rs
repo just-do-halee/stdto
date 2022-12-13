@@ -2,6 +2,8 @@
 pub enum Error {
     #[error("bytes conversion error: {0}")]
     Bytes(#[from] bincode::Error),
+    #[error("json conversion error: {0}")]
+    Json(#[from] serde_json::Error),
     #[error("io error: {0}")]
     Io(#[from] std::io::Error),
     #[error("fmt error: {0}")]

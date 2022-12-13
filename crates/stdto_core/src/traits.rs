@@ -373,15 +373,20 @@ pub trait ToHex: AsRef<[u8]> {
         Ok(hex)
     }
     #[inline]
-    fn try_from_hex(hex: impl AsRef<str>) -> Result<Vec<u8>> {
+    fn try_from_hex(hex: impl AsRef<[u8]>) -> Result<Vec<u8>> {
         let hex = hex.as_ref();
-        let hex = hex.strip_prefix("0x").unwrap_or(hex);
+        let hex = if hex.starts_with(&[b'0', b'x']) {
+            &hex[2..]
+        } else {
+            hex
+        };
         if hex.len() % 2 != 0 {
             return Err(Error::OddLength);
         }
         let mut bytes = Vec::with_capacity(hex.len() / 2);
         for i in (0..hex.len()).step_by(2) {
-            let byte = u8::from_str_radix(&hex[i..i + 2], 16)?;
+            let s = std::str::from_utf8(&hex[i..i + 2])?;
+            let byte = u8::from_str_radix(s, 16)?;
             bytes.push(byte);
         }
         Ok(bytes)
@@ -392,7 +397,7 @@ pub trait ToHex: AsRef<[u8]> {
         reader.read_exact(&mut double)?;
         let mut v = Vec::new();
         let mut take_into_v = |double: &mut [u8; 2]| -> Result<()> {
-            let ch = std::str::from_utf8(double).map_err(Error::Utf8)?;
+            let ch = std::str::from_utf8(double)?;
             let byte = u8::from_str_radix(ch, 16)?;
             v.push(byte);
             double[0] = 0;
@@ -419,12 +424,16 @@ pub trait ToHex: AsRef<[u8]> {
         Ok(v)
     }
     #[inline]
-    fn try_copy_from_hex(&mut self, hex: impl AsRef<str>) -> Result<usize>
+    fn try_copy_from_hex(&mut self, hex: impl AsRef<[u8]>) -> Result<usize>
     where
         Self: AsMut<[u8]>,
     {
         let hex = hex.as_ref();
-        let hex = hex.strip_prefix("0x").unwrap_or(hex);
+        let hex = if hex.starts_with(&[b'0', b'x']) {
+            &hex[2..]
+        } else {
+            hex
+        };
         if hex.len() % 2 != 0 {
             return Err(Error::OddLength);
         }
@@ -434,7 +443,8 @@ pub trait ToHex: AsRef<[u8]> {
             return Err(Error::OutOfBounds(bytes.len(), hex_bytes_len));
         }
         for i in (0..hex.len()).step_by(2) {
-            let byte = u8::from_str_radix(&hex[i..i + 2], 16)?;
+            let s = std::str::from_utf8(&hex[i..i + 2])?;
+            let byte = u8::from_str_radix(s, 16)?;
             bytes[i / 2] = byte;
         }
         Ok(hex_bytes_len)
@@ -507,7 +517,7 @@ pub trait ToHex: AsRef<[u8]> {
     }
 
     #[inline]
-    fn from_hex(hex: impl AsRef<str>) -> Vec<u8> {
+    fn from_hex(hex: impl AsRef<[u8]>) -> Vec<u8> {
         Self::try_from_hex(hex).unwrap()
     }
     #[inline]
@@ -515,7 +525,7 @@ pub trait ToHex: AsRef<[u8]> {
         Self::try_from_hex_from(reader).unwrap()
     }
     #[inline]
-    fn copy_from_hex(&mut self, hex: impl AsRef<str>) -> usize
+    fn copy_from_hex(&mut self, hex: impl AsRef<[u8]>) -> usize
     where
         Self: AsMut<[u8]>,
     {
@@ -523,7 +533,7 @@ pub trait ToHex: AsRef<[u8]> {
     }
 }
 
-/// A trait for creating [`Vec<u8>`] from [`AsRef<[u8]>`]
+/// # A trait for creating [`Vec<u8>`] from [`AsRef<[u8]>`]
 pub trait ToBytesForRef: AsRef<[u8]> {
     fn to_bytes(&self) -> Vec<u8> {
         self.as_ref().to_vec()

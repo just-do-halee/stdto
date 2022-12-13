@@ -11,6 +11,9 @@
 
 - Refactor Cargo.toml: dependency features.
 - It's okay to derive `ToBytes` without `serde::Serialize`. But if you want to use the methods of de/serialization, you should derive `serde::Serialize` or `serde::Deserialize`.
+- ..from_hex(..:  `impl AsRef<str>`) to ..from_hex(..: `impl AsRef<[u8]>`).
+
+Released by [@just-do-halee](https://github.com/just-do-halee).
 
 ## [0.4.0] - 2022-12-13
 
