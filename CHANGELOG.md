@@ -4,6 +4,7 @@
 
 ## Added
 
+- Added `ToJson` and `stdto::json` conversion.
 - Added `ToStringForRef` functional trait for converting between `AsRef<[u8]>` and `String` or `&str`.
 
 ## Improved

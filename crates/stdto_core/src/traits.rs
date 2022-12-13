@@ -7,6 +7,7 @@ use std::{fmt, io};
 use bincode::Options;
 use digest::{Digest, Output};
 use serde::{de::DeserializeOwned, Serialize};
+use serde_json::Value;
 
 macro_rules! serialize {
     (data: $self:expr, option: $option:expr) => {
@@ -347,6 +348,139 @@ pub trait ToHash: ToBytes {
     }
 }
 
+/// # A trait that can be converted to a hex string.
+pub trait ToJson {
+    // --- Value ----
+    fn try_to_json_value(&self) -> Result<Value>
+    where
+        Self: Serialize,
+    {
+        serde_json::to_value(self).map_err(Error::Json)
+    }
+    fn try_to_json_value_into(&self, writer: impl io::Write) -> Result<()>
+    where
+        Self: Serialize,
+    {
+        serde_json::to_writer(writer, self).map_err(Error::Json)
+    }
+    fn try_from_json_value(json: impl AsRef<[u8]>) -> Result<Value>
+    where
+        Self: DeserializeOwned,
+    {
+        serde_json::from_slice(json.as_ref()).map_err(Error::Json)
+    }
+    fn try_from_json_value_from(reader: impl io::Read) -> Result<Value>
+    where
+        Self: DeserializeOwned,
+    {
+        serde_json::from_reader(reader).map_err(Error::Json)
+    }
+    // --------------
+    fn to_json_value(&self) -> Value
+    where
+        Self: Serialize,
+    {
+        self.try_to_json_value().unwrap()
+    }
+    fn to_json_value_into(&self, writer: impl io::Write)
+    where
+        Self: Serialize,
+    {
+        self.try_to_json_value_into(writer).unwrap()
+    }
+    fn from_json_value(json: impl AsRef<[u8]>) -> Value
+    where
+        Self: DeserializeOwned,
+    {
+        Self::try_from_json_value(json).unwrap()
+    }
+    fn from_json_value_from(reader: impl io::Read) -> Value
+    where
+        Self: DeserializeOwned,
+    {
+        Self::try_from_json_value_from(reader).unwrap()
+    }
+    // --------------
+
+    // --- String ----
+    fn try_to_json(&self) -> Result<String>
+    where
+        Self: Serialize,
+    {
+        serde_json::to_string(self).map_err(Error::Json)
+    }
+    fn try_to_json_into(&self, writer: impl io::Write) -> Result<()>
+    where
+        Self: Serialize,
+    {
+        serde_json::to_writer(writer, self).map_err(Error::Json)
+    }
+    fn try_from_json(json: impl AsRef<[u8]>) -> Result<Self>
+    where
+        Self: DeserializeOwned,
+    {
+        serde_json::from_slice(json.as_ref()).map_err(Error::Json)
+    }
+    fn try_from_json_from(reader: impl io::Read) -> Result<Self>
+    where
+        Self: DeserializeOwned,
+    {
+        serde_json::from_reader(reader).map_err(Error::Json)
+    }
+    // --------------
+    fn to_json(&self) -> String
+    where
+        Self: Serialize,
+    {
+        self.try_to_json().unwrap()
+    }
+    fn to_json_into(&self, writer: impl io::Write)
+    where
+        Self: Serialize,
+    {
+        self.try_to_json_into(writer).unwrap()
+    }
+    fn from_json(json: impl AsRef<[u8]>) -> Self
+    where
+        Self: DeserializeOwned,
+    {
+        Self::try_from_json(json).unwrap()
+    }
+    fn from_json_from(reader: impl io::Read) -> Self
+    where
+        Self: DeserializeOwned,
+    {
+        Self::try_from_json_from(reader).unwrap()
+    }
+    // --------------
+    fn try_to_json_pretty(&self) -> Result<String>
+    where
+        Self: Serialize,
+    {
+        serde_json::to_string_pretty(self).map_err(Error::Json)
+    }
+    fn try_to_json_pretty_into(&self, writer: impl io::Write) -> Result<()>
+    where
+        Self: Serialize,
+    {
+        serde_json::to_writer_pretty(writer, self).map_err(Error::Json)
+    }
+    // --------------
+    fn to_json_pretty(&self) -> String
+    where
+        Self: Serialize,
+    {
+        self.try_to_json_pretty().unwrap()
+    }
+    fn to_json_pretty_into(&self, writer: impl io::Write)
+    where
+        Self: Serialize,
+    {
+        self.try_to_json_pretty_into(writer).unwrap()
+    }
+    // --------------
+}
+
 /// # A trait that can convert bytes to hex string. (encode/decode)
 pub trait ToHex: AsRef<[u8]> {
     #[inline]
@@ -620,6 +754,7 @@ mod tests {
     }
     impl ToBytes for Test {}
     impl ToHash for Test {}
+    impl ToJson for Test {}
 
     #[test]
     fn test_to_bytes() {
@@ -753,6 +888,36 @@ mod tests {
             26, 143, 64, 16, 251, 138, 178, 167, 255, 87, 173, 70, 37,
         ];
         assert_eq!(hash, want);
+    }
+
+    #[test]
+    fn test_to_json() {
+        let test = Test {
+            a: 1,
+            b: "hello".to_owned(),
+            c: [0; 32],
+            d: vec![1, 2, 3],
+        };
+        let json = test.to_json();
+        let test2 = Test::from_json(json);
+        if test != test2 {
+            panic!("test != test2");
+        }
+    }
+
+    #[test]
+    fn test_to_json_pretty() {
+        let test = Test {
+            a: 1,
+            b: "hello".to_owned(),
+            c: [0; 32],
+            d: vec![1, 2, 3],
+        };
+        let json = test.to_json_pretty();
+        let test2 = Test::from_json(json);
+        if test != test2 {
+            panic!("test != test2");
+        }
     }
 
     #[test]

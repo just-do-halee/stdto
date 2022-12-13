@@ -50,7 +50,6 @@ pub fn to_hash(input: TokenStream) -> TokenStream {
     let ast = syn::parse_macro_input!(input as syn::DeriveInput);
     let name = &ast.ident;
     let (impl_generics, ty_generics, where_clause) = &ast.generics.split_for_impl();
-
     quote! {
         impl #impl_generics stdto::ToHash for #name #ty_generics #where_clause {
         }
@@ -63,6 +62,28 @@ pub fn hash(_: TokenStream, item: TokenStream) -> TokenStream {
     let ast = syn::parse_macro_input!(item as syn::DeriveInput);
     quote! {
         #[derive(stdto::ToHash)]
+        #ast
+    }
+    .into()
+}
+
+#[proc_macro_derive(ToJson)]
+pub fn to_json(input: TokenStream) -> TokenStream {
+    let ast = syn::parse_macro_input!(input as syn::DeriveInput);
+    let name = &ast.ident;
+    let (impl_generics, ty_generics, where_clause) = &ast.generics.split_for_impl();
+    quote! {
+        impl #impl_generics stdto::ToJson for #name #ty_generics #where_clause {
+        }
+    }
+    .into()
+}
+
+#[proc_macro_attribute]
+pub fn json(_: TokenStream, item: TokenStream) -> TokenStream {
+    let ast = syn::parse_macro_input!(item as syn::DeriveInput);
+    quote! {
+        #[derive(stdto::ToJson)]
         #ast
     }
     .into()

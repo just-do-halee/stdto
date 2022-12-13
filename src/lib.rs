@@ -14,6 +14,11 @@ pub mod prelude {
     #[cfg(all(feature = "hash", feature = "derive"))]
     pub use stdto_derive::ToHash;
 
+    #[cfg(feature = "json")]
+    pub use stdto_core::ToJson;
+    #[cfg(all(feature = "json", feature = "derive"))]
+    pub use stdto_derive::ToJson;
+
     #[cfg(feature = "hex")]
     pub use stdto_core::ToHex;
 }
@@ -42,13 +47,14 @@ pub use stdto_derive::hash;
 
 // -----------------------------------------------------
 
+#[cfg(feature = "json")]
+pub use stdto_core::serde_json;
+#[cfg(all(feature = "json", feature = "derive"))]
+pub use stdto_derive::json;
+
+// -----------------------------------------------------
+
 #[cfg(feature = "hex")]
 pub use stdto_core::HexMode;
 
 // -----------------------------------------------------
-
-// #[cfg(feature = "json")]
-// pub use stdto_core::ToJson;
-// #[cfg(all(feature = "derive", feature = "json"))]
-// pub use stdto_derive::json;
-//

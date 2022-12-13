@@ -65,7 +65,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let hex = hash.to_hex();
     let hex_bytes = Vec::<u8>::from_hex(&hex);
-    assert_eq!(hex, hex_bytes.to_string());
+    assert_eq!(hex, hex_bytes.to_hex());
 
     let hex = "2f048f12f50bf07e2843f6a3d1a91b21afaf7a1a8f4010fb8ab2a7ff57ad4625";
     let mut hash = [0u8; 42];
