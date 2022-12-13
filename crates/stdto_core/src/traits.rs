@@ -41,14 +41,23 @@ macro_rules! deserialize {
     };
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct ToBytesOptions {
     pub endian: Endian,
+}
+impl ToBytesOptions {
+    #[inline]
+    pub const fn default() -> Self {
+        ToBytesOptions {
+            endian: Endian::Little,
+        }
+    }
 }
 
 /// # A trait that can de/serialize something with bytes. (default: little endian)
 pub trait ToBytes: Serialize {
     const OPTIONS: ToBytesOptions = ToBytesOptions {
-        endian: Endian::Little,
+        ..ToBytesOptions::default()
     };
 
     /// Serialize to bytes.
