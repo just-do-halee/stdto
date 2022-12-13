@@ -2,6 +2,9 @@
 
 ## [unreleased] - ReleaseDate
 
+## Added
+
+- Added `prelude` module for core and derive traits only.
 
 ## [0.3.0] - 2022-12-12
 

@@ -25,6 +25,8 @@ stdto = "0.3.0"
 ## **`How to`**
 
 ```rust
+use stdto::prelude::*;
+
 // #[stdto::bytes(endian = "little")]
 #[stdto::bytes]
 struct Test {

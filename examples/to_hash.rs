@@ -1,6 +1,6 @@
 use std::{collections::HashMap, error::Error};
 
-use stdto::ToHash;
+use stdto::prelude::*;
 
 #[stdto::bytes]
 #[stdto::hash]
