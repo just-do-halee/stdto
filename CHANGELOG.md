@@ -2,6 +2,13 @@
 
 ## [unreleased] - ReleaseDate
 
+## Added
+
+- Added const fn `ToBytesOptions::default()`.
+
+## Improved
+
+- Refactor Cargo.toml: dependency features.
 
 ## [0.4.0] - 2022-12-13
 
