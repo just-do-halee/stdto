@@ -32,10 +32,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut hasher = sha2::Sha256::new();
     origin.to_hash_into(&mut hasher);
     let hash: [u8; 32] = hasher.finalize().into();
-    let want = [
-        94, 85, 222, 199, 98, 247, 173, 139, 127, 248, 253, 9, 101, 4, 62, 119, 252, 36, 222, 79,
-        4, 212, 157, 174, 66, 199, 110, 103, 88, 59, 89, 227,
-    ];
     assert_eq!(hash, want);
     Ok(())
 }

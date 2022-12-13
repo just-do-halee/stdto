@@ -533,18 +533,75 @@ pub trait ToHex: AsRef<[u8]> {
     }
 }
 
+pub trait ToStringForRef: AsRef<[u8]> {
+    #[inline]
+    fn try_as_str(&self) -> Result<&str> {
+        std::str::from_utf8(self.as_ref()).map_err(Error::Utf8)
+    }
+    #[inline]
+    fn try_to_string(&self) -> Result<String> {
+        self.try_as_str().map(|s| s.to_string())
+    }
+    /// # Safety
+    /// This function is unsafe because it does not check if the bytes are valid UTF-8.
+    #[inline]
+    fn as_str(&self) -> &str {
+        self.try_as_str().unwrap()
+    }
+    /// # Safety
+    /// This function is unsafe because it does not check if the bytes are valid UTF-8.
+    #[inline]
+    fn to_string(&self) -> String {
+        self.try_to_string().unwrap()
+    }
+    #[inline]
+    fn to_string_lossy(&self) -> String {
+        String::from_utf8_lossy(self.as_ref()).to_string()
+    }
+    #[inline]
+    fn try_into_string(self) -> Result<String>
+    where
+        Self: Sized,
+    {
+        self.try_to_string()
+    }
+    /// # Safety
+    /// This function is unsafe because it does not check if the bytes are valid UTF-8.
+    #[inline]
+    fn into_string(self) -> String
+    where
+        Self: Sized,
+    {
+        self.to_string()
+    }
+}
 /// # A trait for creating [`Vec<u8>`] from `AsRef<[u8]>`
 pub trait ToBytesForRef: AsRef<[u8]> {
-    fn to_bytes(&self) -> Vec<u8> {
+    #[inline]
+    fn as_bytes(&self) -> &[u8] {
+        self.as_ref()
+    }
+    #[inline]
+    fn into_bytes(self) -> Vec<u8>
+    where
+        Self: Sized,
+    {
         self.as_ref().to_vec()
     }
+    #[inline]
+    fn to_bytes(&self) -> Vec<u8> {
+        self.into_bytes()
+    }
+    #[inline]
     fn try_to_bytes_into(&self, mut writer: impl io::Write) -> Result<()> {
         writer.write_all(self.as_ref()).map_err(Error::Io)
     }
+    #[inline]
     fn to_bytes_into(&self, mut writer: impl io::Write) {
         writer.write_all(self.as_ref()).unwrap()
     }
 }
+impl<T: AsRef<[u8]>> ToStringForRef for T {}
 impl<T: AsRef<[u8]>> ToBytesForRef for T {}
 impl<T: AsRef<[u8]>> ToHex for T {}
 
@@ -636,6 +693,32 @@ mod tests {
         let bytes = arr.to_bytes();
         let bytes2 = arr.to_vec();
         assert_eq!(bytes, bytes2);
+    }
+
+    #[test]
+    fn test_to_string_for_ref() {
+        let s = "Hello world".to_string();
+        let _s2 = s.as_bytes();
+        let s2 = _s2.as_str();
+        assert_eq!(s, s2);
+
+        let arr = [72, 105, 32, 77, 111, 109];
+        let s = arr.as_str();
+        assert_eq!(s, "Hi Mom");
+
+        let bytes = s.to_bytes();
+        let s2 = bytes.to_string();
+        assert_eq!(s, s2);
+
+        let a = arr.to_string();
+        let b = arr.into_string().into_bytes().to_string();
+        assert_eq!(a, b);
+
+        let arr = [72, 105, 77, 111, 109];
+        let s1 = arr.into_string();
+        let bytes = s1.to_bytes();
+        let s2 = bytes.as_str();
+        assert_eq!(s1, s2);
     }
 
     #[test]

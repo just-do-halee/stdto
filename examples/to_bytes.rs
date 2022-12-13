@@ -38,7 +38,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     bytes.clear();
 
     origin.to_bytes_into(&mut bytes);
-    Test::from_bytes_from(&mut Cursor::new(&bytes));
+    Test::from_bytes_from(bytes.as_slice());
 
     bytes.clear();
 

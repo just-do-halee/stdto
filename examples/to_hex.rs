@@ -63,6 +63,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         "0x5E55DEC762F7AD8B7FF8FD0965043E77FC24DE4F04D49DAE42C76E67583B59E3"
     );
 
+    let hex = hash.to_hex();
+    let hex_bytes = Vec::<u8>::from_hex(&hex);
+    assert_eq!(hex, hex_bytes.to_string());
+
     let hex = "2f048f12f50bf07e2843f6a3d1a91b21afaf7a1a8f4010fb8ab2a7ff57ad4625";
     let mut hash = [0u8; 42];
     let n = hash.copy_from_hex(hex);

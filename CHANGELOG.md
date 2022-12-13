@@ -2,9 +2,14 @@
 
 ## [unreleased] - ReleaseDate
 
+## Added
+
+- Added `ToStringForRef` functional trait for converting between `AsRef<[u8]>` and `String` or `&str`.
+
 ## Improved
 
 - Changed all of `..from_bytes_..<'a>(..: &'a [u8])..` to `..from_bytes_..(..: impl AsRef<[u8]>)..`.
+- Added `as_bytes()`, `into_bytes()` in the `ToBytesForRef` trait.
 
 Released by [@just-do-halee](https://github.com/just-do-halee).
 

@@ -26,7 +26,9 @@ stdto = "0.5.0"
 
 ```rust
 use stdto::prelude::*;
+```
 
+```rust
 // #[stdto::bytes(endian = "little")]
 #[stdto::bytes]
 struct Test {
@@ -38,7 +40,7 @@ struct Test {
 }
 
 bytes = test.to_bytes();
-Test::from_bytes(&bytes);
+Test::from_bytes(bytes);
 ```
 
 ```rust
@@ -48,15 +50,26 @@ struct Test {
     ...
 }
 
-test.to_hash::<Sha256>();
+hash = test.to_hash::<Sha256>();
 ```
 
 ```rust
-// AsRef<u8> to hex
+// AsRef<[u8]> to hex
 
-hex = bytes.to_hex();
+hex = hash.to_hex();
 Vec::<u8>::from_hex(hex);
 
-let mut arr = [0u8; 32];
+mut arr = [0u8; 32];
 arr.copy_from_hex(hex);
+```
+
+```rust
+// AsRef<[u8]> <-> String, &str
+
+arr = [72, 105, 77, 111, 109];
+s1 = arr.into_string();
+bytes = s1.to_bytes();
+s2 = bytes.as_str();
+
+assert_eq!(s1, s2);
 ```

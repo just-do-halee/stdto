@@ -5,7 +5,7 @@ pub use stdto_core::error;
 /// core and derive traits.
 pub mod prelude {
     #[cfg(feature = "bytes")]
-    pub use stdto_core::{ToBytes, ToBytesForRef};
+    pub use stdto_core::{ToBytes, ToBytesForRef, ToStringForRef};
     #[cfg(all(feature = "bytes", feature = "derive"))]
     pub use stdto_derive::ToBytes;
 
