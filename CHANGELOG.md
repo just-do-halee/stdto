@@ -2,6 +2,9 @@
 
 ## [unreleased] - ReleaseDate
 
+
+## [0.4.0] - 2022-12-13
+
 ## Added
 
 - Added `prelude` module for core and derive traits only.
@@ -45,7 +48,9 @@ Released by [@just-do-halee](https://github.com/just-do-halee).
 
 <!-- next-url -->
 
-[unreleased]: https://github.com/just-do-halee/stdto/compare/v0.3.0...HEAD
+[unreleased]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.4.0...HEAD
+
+[0.4.0]: https://github.com/just-do-halee/stdto/compare/v0.3.0...stdto_core-v0.4.0
 
 [0.3.0]: https://github.com/just-do-halee/stdto/compare/v0.2.0...v0.3.0
 

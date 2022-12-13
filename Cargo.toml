@@ -29,7 +29,7 @@ license = "MIT OR Apache-2.0"
 readme = "README.md"
 
 [dependencies]
-stdto_core = { version = "0.3", path = "crates/stdto_core" }
+stdto_core = { version = "0.4", path = "crates/stdto_core" }
 stdto_derive = { version = "0.3", path = "crates/stdto_derive" }
 
 [dev-dependencies]
