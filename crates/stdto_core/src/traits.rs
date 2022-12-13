@@ -6,7 +6,7 @@ use std::{fmt, io};
 
 use bincode::Options;
 use digest::{Digest, Output};
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use serde::{de::DeserializeOwned, Serialize};
 
 macro_rules! serialize {
     (data: $self:expr, option: $option:expr) => {
@@ -150,25 +150,25 @@ pub trait ToBytes {
 
     /// Deserialize from bytes.
     #[inline]
-    fn try_from_be_bytes<'a>(bytes: &'a [u8]) -> Result<Self>
+    fn try_from_be_bytes(bytes: impl AsRef<[u8]>) -> Result<Self>
     where
-        Self: Deserialize<'a>,
+        Self: DeserializeOwned,
     {
-        deserialize!(data: bytes, option: bincode::options().with_big_endian())
+        deserialize!(data: bytes.as_ref(), option: bincode::options().with_big_endian())
     }
     #[inline]
-    fn try_from_le_bytes<'a>(bytes: &'a [u8]) -> Result<Self>
+    fn try_from_le_bytes(bytes: impl AsRef<[u8]>) -> Result<Self>
     where
-        Self: Deserialize<'a>,
+        Self: DeserializeOwned,
     {
-        deserialize!(data: bytes, option: bincode::options().with_little_endian())
+        deserialize!(data: bytes.as_ref(), option: bincode::options().with_little_endian())
     }
     #[inline]
-    fn try_from_ne_bytes<'a>(bytes: &'a [u8]) -> Result<Self>
+    fn try_from_ne_bytes(bytes: impl AsRef<[u8]>) -> Result<Self>
     where
-        Self: Deserialize<'a>,
+        Self: DeserializeOwned,
     {
-        deserialize!(data: bytes, option: bincode::options().with_native_endian())
+        deserialize!(data: bytes.as_ref(), option: bincode::options().with_native_endian())
     }
     #[inline]
     fn try_from_be_bytes_from(reader: impl io::Read) -> Result<Self>
@@ -193,23 +193,23 @@ pub trait ToBytes {
     }
     // ---------------------
     #[inline]
-    fn from_be_bytes<'a>(bytes: &'a [u8]) -> Self
+    fn from_be_bytes(bytes: impl AsRef<[u8]>) -> Self
     where
-        Self: Deserialize<'a>,
+        Self: DeserializeOwned,
     {
         Self::try_from_be_bytes(bytes).unwrap()
     }
     #[inline]
-    fn from_le_bytes<'a>(bytes: &'a [u8]) -> Self
+    fn from_le_bytes(bytes: impl AsRef<[u8]>) -> Self
     where
-        Self: Deserialize<'a>,
+        Self: DeserializeOwned,
     {
         Self::try_from_le_bytes(bytes).unwrap()
     }
     #[inline]
-    fn from_ne_bytes<'a>(bytes: &'a [u8]) -> Self
+    fn from_ne_bytes(bytes: impl AsRef<[u8]>) -> Self
     where
-        Self: Deserialize<'a>,
+        Self: DeserializeOwned,
     {
         Self::try_from_ne_bytes(bytes).unwrap()
     }
@@ -259,9 +259,9 @@ pub trait ToBytes {
         }
     }
     #[inline]
-    fn try_from_bytes<'a>(bytes: &'a [u8]) -> Result<Self>
+    fn try_from_bytes(bytes: impl AsRef<[u8]>) -> Result<Self>
     where
-        Self: Deserialize<'a>,
+        Self: DeserializeOwned,
     {
         match Self::OPTIONS.endian {
             Endian::Big => Self::try_from_be_bytes(bytes),
@@ -296,9 +296,9 @@ pub trait ToBytes {
         self.try_to_bytes_into(writer).unwrap()
     }
     #[inline]
-    fn from_bytes<'a>(bytes: &'a [u8]) -> Self
+    fn from_bytes(bytes: impl AsRef<[u8]>) -> Self
     where
-        Self: Deserialize<'a>,
+        Self: DeserializeOwned,
     {
         Self::try_from_bytes(bytes).unwrap()
     }
@@ -551,6 +551,7 @@ impl<T: AsRef<[u8]>> ToHex for T {}
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serde::Deserialize;
 
     use sha2::Sha256;
     #[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]

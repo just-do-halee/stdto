@@ -2,6 +2,11 @@
 
 ## [unreleased] - ReleaseDate
 
+## Improved
+
+- Changed all of `..from_bytes_..<'a>(..: &'a [u8])..` to `..from_bytes_..(..: impl AsRef<[u8]>)..`.
+
+Released by [@just-do-halee](https://github.com/just-do-halee).
 
 ## [0.5.0] - 2022-12-13
 

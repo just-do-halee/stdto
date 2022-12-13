@@ -43,7 +43,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     bytes.clear();
 
     origin.try_to_bytes_into(&mut bytes)?;
-    Test::try_from_bytes_from(&mut Cursor::new(&bytes))?;
+    Test::try_from_bytes_from(bytes.as_slice())?;
+
+    Test::from_bytes(bytes);
 
     let be_bytes = origin.to_be_bytes();
     let le_bytes = origin.to_le_bytes();
