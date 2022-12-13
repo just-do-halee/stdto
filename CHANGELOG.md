@@ -5,6 +5,11 @@
 ## Added
 
 - Added `prelude` module for core and derive traits only.
+- Added `to_ne_bytes..` and `from_ne_bytes..` methods in `ToBytes`.
+
+## Fixed
+
+- Fixed `#[stdto::bytes(endian = "native")]` typo bug.
 
 ## [0.3.0] - 2022-12-12
 

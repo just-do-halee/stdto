@@ -61,12 +61,20 @@ pub trait ToBytes: Serialize {
         serialize!(data: self, option: bincode::options().with_little_endian())
     }
     #[inline]
+    fn try_to_ne_bytes(&self) -> Result<Vec<u8>> {
+        serialize!(data: self, option: bincode::options().with_native_endian())
+    }
+    #[inline]
     fn try_to_be_bytes_into(&self, writer: impl io::Write) -> Result<()> {
         serialize!(data: self, writer: writer, option: bincode::options().with_big_endian())
     }
     #[inline]
     fn try_to_le_bytes_into(&self, writer: impl io::Write) -> Result<()> {
         serialize!(data: self, writer: writer, option: bincode::options().with_little_endian())
+    }
+    #[inline]
+    fn try_to_ne_bytes_into(&self, writer: impl io::Write) -> Result<()> {
+        serialize!(data: self, writer: writer, option: bincode::options().with_native_endian())
     }
     #[inline]
     fn to_be_bytes(&self) -> Vec<u8> {
@@ -77,6 +85,10 @@ pub trait ToBytes: Serialize {
         serialize!(data: self, option: bincode::options().with_little_endian()).unwrap()
     }
     #[inline]
+    fn to_ne_bytes(&self) -> Vec<u8> {
+        serialize!(data: self, option: bincode::options().with_native_endian()).unwrap()
+    }
+    #[inline]
     fn to_be_bytes_into(&self, writer: impl io::Write) {
         serialize!(data: self, writer: writer, option: bincode::options().with_big_endian())
             .unwrap()
@@ -84,6 +96,11 @@ pub trait ToBytes: Serialize {
     #[inline]
     fn to_le_bytes_into(&self, writer: impl io::Write) {
         serialize!(data: self, writer: writer, option: bincode::options().with_little_endian())
+            .unwrap()
+    }
+    #[inline]
+    fn to_ne_bytes_into(&self, writer: impl io::Write) {
+        serialize!(data: self, writer: writer, option: bincode::options().with_native_endian())
             .unwrap()
     }
 
@@ -103,6 +120,13 @@ pub trait ToBytes: Serialize {
         deserialize!(data: bytes, option: bincode::options().with_little_endian())
     }
     #[inline]
+    fn try_from_ne_bytes<'a>(bytes: &'a [u8]) -> Result<Self>
+    where
+        Self: Deserialize<'a>,
+    {
+        deserialize!(data: bytes, option: bincode::options().with_native_endian())
+    }
+    #[inline]
     fn try_from_be_bytes_from(reader: impl io::Read) -> Result<Self>
     where
         Self: DeserializeOwned,
@@ -115,6 +139,13 @@ pub trait ToBytes: Serialize {
         Self: DeserializeOwned,
     {
         deserialize!(reader: reader, option: bincode::options().with_little_endian())
+    }
+    #[inline]
+    fn try_from_ne_bytes_from(reader: impl io::Read) -> Result<Self>
+    where
+        Self: DeserializeOwned,
+    {
+        deserialize!(reader: reader, option: bincode::options().with_native_endian())
     }
     #[inline]
     fn from_be_bytes<'a>(bytes: &'a [u8]) -> Self
@@ -131,6 +162,13 @@ pub trait ToBytes: Serialize {
         Self::try_from_le_bytes(bytes).unwrap()
     }
     #[inline]
+    fn from_ne_bytes<'a>(bytes: &'a [u8]) -> Self
+    where
+        Self: Deserialize<'a>,
+    {
+        Self::try_from_ne_bytes(bytes).unwrap()
+    }
+    #[inline]
     fn from_be_bytes_from(reader: impl io::Read) -> Self
     where
         Self: DeserializeOwned,
@@ -144,6 +182,13 @@ pub trait ToBytes: Serialize {
     {
         Self::try_from_le_bytes_from(reader).unwrap()
     }
+    #[inline]
+    fn from_ne_bytes_from(reader: impl io::Read) -> Self
+    where
+        Self: DeserializeOwned,
+    {
+        Self::try_from_ne_bytes_from(reader).unwrap()
+    }
 
     // ------------- default endians -------------
     #[inline]
@@ -151,7 +196,7 @@ pub trait ToBytes: Serialize {
         match Self::OPTIONS.endian {
             Endian::Big => self.try_to_be_bytes(),
             Endian::Little => self.try_to_le_bytes(),
-            Endian::Native => self.try_to_le_bytes(),
+            Endian::Native => self.try_to_ne_bytes(),
         }
     }
     #[inline]
@@ -159,7 +204,7 @@ pub trait ToBytes: Serialize {
         match Self::OPTIONS.endian {
             Endian::Big => self.try_to_be_bytes_into(writer),
             Endian::Little => self.try_to_le_bytes_into(writer),
-            Endian::Native => self.try_to_le_bytes_into(writer),
+            Endian::Native => self.try_to_ne_bytes_into(writer),
         }
     }
     #[inline]
@@ -170,7 +215,7 @@ pub trait ToBytes: Serialize {
         match Self::OPTIONS.endian {
             Endian::Big => Self::try_from_be_bytes(bytes),
             Endian::Little => Self::try_from_le_bytes(bytes),
-            Endian::Native => Self::try_from_le_bytes(bytes),
+            Endian::Native => Self::try_from_ne_bytes(bytes),
         }
     }
     #[inline]
@@ -181,7 +226,7 @@ pub trait ToBytes: Serialize {
         match Self::OPTIONS.endian {
             Endian::Big => Self::try_from_be_bytes_from(reader),
             Endian::Little => Self::try_from_le_bytes_from(reader),
-            Endian::Native => Self::try_from_le_bytes_from(reader),
+            Endian::Native => Self::try_from_ne_bytes_from(reader),
         }
     }
     // --------------------------------------------------
@@ -470,6 +515,19 @@ mod tests {
         if test != test2 {
             panic!("test != test2");
         }
+    }
+
+    #[test]
+    fn test_endians() {
+        let test = Test {
+            a: 1,
+            b: "hello".to_owned(),
+            c: [0; 32],
+            d: vec![1, 2, 3],
+        };
+        let be_bytes = test.to_be_bytes();
+        let le_bytes = test.to_le_bytes();
+        assert_ne!(be_bytes, le_bytes);
     }
 
     #[test]

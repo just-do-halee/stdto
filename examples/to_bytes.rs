@@ -2,7 +2,7 @@ use std::{collections::HashMap, error::Error, io::Cursor};
 
 use stdto::ToBytes;
 
-#[stdto::bytes(endian = "little")]
+#[stdto::bytes(endian = "big")]
 struct Test {
     a: u32,
     b: String,
@@ -39,6 +39,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     origin.try_to_bytes_into(&mut bytes)?;
     Test::try_from_bytes_from(&mut Cursor::new(&bytes))?;
+
+    let be_bytes = origin.to_be_bytes();
+    let le_bytes = origin.to_le_bytes();
+    assert_ne!(be_bytes, le_bytes);
 
     Ok(())
 }
