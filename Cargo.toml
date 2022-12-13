@@ -1,11 +1,11 @@
 
 [package]
 name = "stdto"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
 authors = ["just-do-halee <just.do.halee@gmail.com>"]
 categories = ["development-tools", "rust-patterns", "encoding", "parsing-tools"]
-keywords = ["serde", "bytes", "hash", "json", "encoding", "decoding"]
+keywords = ["serde", "bytes", "hash", "json", "encoding"]
 description = "Stdto provides a set of functional traits for conversion between various data representations."
 homepage = "https://github.com/just-do-halee/stdto"
 repository = "https://github.com/just-do-halee/stdto"
@@ -22,7 +22,7 @@ edition = "2021"
 authors = ["just-do-halee <just.do.halee@gmail.com>"]
 description = "Stdto provides a set of functional traits for conversion between various data representations."
 categories = ["development-tools", "rust-patterns", "encoding", "parsing-tools"]
-keywords = ["serde", "bytes", "hash", "json", "encoding", "decoding"]
+keywords = ["serde", "bytes", "hash", "json", "encoding"]
 homepage = "https://github.com/just-do-halee/stdto"
 repository = "https://github.com/just-do-halee/stdto"
 license = "MIT OR Apache-2.0"
