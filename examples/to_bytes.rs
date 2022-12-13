@@ -2,8 +2,11 @@
 
 use std::{collections::HashMap, error::Error, io::Cursor};
 
-use stdto::ToBytes;
+use stdto::prelude::*;
 
+// #[stdto::serde]
+// #[derive(ToBytes)]
+// same as
 #[stdto::bytes(endian = "big")]
 struct Test {
     a: u32,
@@ -46,7 +49,21 @@ fn main() -> Result<(), Box<dyn Error>> {
     let le_bytes = origin.to_le_bytes();
     assert_ne!(be_bytes, le_bytes);
 
-    test_custom()
+    test_custom()?;
+
+    let s = "Hello world".to_string();
+    let bytes = s.to_bytes();
+    let bytes2 = s.as_bytes().to_vec();
+    let bytes3 = s.into_bytes();
+    assert_eq!(bytes, bytes2);
+    assert_eq!(bytes, bytes3);
+
+    let arr = [1u8, 2, 3, 4, 5];
+    let bytes = arr.to_bytes();
+    let bytes2 = arr.to_vec();
+    assert_eq!(bytes, bytes2);
+
+    Ok(())
 }
 
 #[stdto::serde]

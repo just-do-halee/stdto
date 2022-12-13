@@ -11,7 +11,7 @@ pub extern crate serde;
 #[cfg(feature = "bytes")]
 pub use crate::{
     enums::{Endian, HexMode},
-    traits::{ToBytes, ToBytesOptions},
+    traits::{ToBytes, ToBytesForRef, ToBytesOptions},
 };
 
 #[cfg(feature = "hash")]

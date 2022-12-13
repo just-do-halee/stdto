@@ -55,63 +55,98 @@ impl ToBytesOptions {
 }
 
 /// # A trait that can de/serialize something with bytes. (default: little endian)
-pub trait ToBytes: Serialize {
+pub trait ToBytes {
     const OPTIONS: ToBytesOptions = ToBytesOptions {
         ..ToBytesOptions::default()
     };
 
     /// Serialize to bytes.
     #[inline]
-    fn try_to_be_bytes(&self) -> Result<Vec<u8>> {
+    fn try_to_be_bytes(&self) -> Result<Vec<u8>>
+    where
+        Self: Serialize,
+    {
         serialize!(data: self, option: bincode::options().with_big_endian())
     }
     #[inline]
-    fn try_to_le_bytes(&self) -> Result<Vec<u8>> {
+    fn try_to_le_bytes(&self) -> Result<Vec<u8>>
+    where
+        Self: Serialize,
+    {
         serialize!(data: self, option: bincode::options().with_little_endian())
     }
     #[inline]
-    fn try_to_ne_bytes(&self) -> Result<Vec<u8>> {
+    fn try_to_ne_bytes(&self) -> Result<Vec<u8>>
+    where
+        Self: Serialize,
+    {
         serialize!(data: self, option: bincode::options().with_native_endian())
     }
     #[inline]
-    fn try_to_be_bytes_into(&self, writer: impl io::Write) -> Result<()> {
+    fn try_to_be_bytes_into(&self, writer: impl io::Write) -> Result<()>
+    where
+        Self: Serialize,
+    {
         serialize!(data: self, writer: writer, option: bincode::options().with_big_endian())
     }
     #[inline]
-    fn try_to_le_bytes_into(&self, writer: impl io::Write) -> Result<()> {
+    fn try_to_le_bytes_into(&self, writer: impl io::Write) -> Result<()>
+    where
+        Self: Serialize,
+    {
         serialize!(data: self, writer: writer, option: bincode::options().with_little_endian())
     }
     #[inline]
-    fn try_to_ne_bytes_into(&self, writer: impl io::Write) -> Result<()> {
+    fn try_to_ne_bytes_into(&self, writer: impl io::Write) -> Result<()>
+    where
+        Self: Serialize,
+    {
         serialize!(data: self, writer: writer, option: bincode::options().with_native_endian())
     }
+    // ---------------------
     #[inline]
-    fn to_be_bytes(&self) -> Vec<u8> {
-        serialize!(data: self, option: bincode::options().with_big_endian()).unwrap()
+    fn to_be_bytes(&self) -> Vec<u8>
+    where
+        Self: Serialize,
+    {
+        self.try_to_be_bytes().unwrap()
     }
     #[inline]
-    fn to_le_bytes(&self) -> Vec<u8> {
-        serialize!(data: self, option: bincode::options().with_little_endian()).unwrap()
+    fn to_le_bytes(&self) -> Vec<u8>
+    where
+        Self: Serialize,
+    {
+        self.try_to_le_bytes().unwrap()
     }
     #[inline]
-    fn to_ne_bytes(&self) -> Vec<u8> {
-        serialize!(data: self, option: bincode::options().with_native_endian()).unwrap()
+    fn to_ne_bytes(&self) -> Vec<u8>
+    where
+        Self: Serialize,
+    {
+        self.try_to_ne_bytes().unwrap()
     }
     #[inline]
-    fn to_be_bytes_into(&self, writer: impl io::Write) {
-        serialize!(data: self, writer: writer, option: bincode::options().with_big_endian())
-            .unwrap()
+    fn to_be_bytes_into(&self, writer: impl io::Write)
+    where
+        Self: Serialize,
+    {
+        self.try_to_be_bytes_into(writer).unwrap()
     }
     #[inline]
-    fn to_le_bytes_into(&self, writer: impl io::Write) {
-        serialize!(data: self, writer: writer, option: bincode::options().with_little_endian())
-            .unwrap()
+    fn to_le_bytes_into(&self, writer: impl io::Write)
+    where
+        Self: Serialize,
+    {
+        self.try_to_le_bytes_into(writer).unwrap()
     }
     #[inline]
-    fn to_ne_bytes_into(&self, writer: impl io::Write) {
-        serialize!(data: self, writer: writer, option: bincode::options().with_native_endian())
-            .unwrap()
+    fn to_ne_bytes_into(&self, writer: impl io::Write)
+    where
+        Self: Serialize,
+    {
+        self.try_to_ne_bytes_into(writer).unwrap()
     }
+    // ---------------------
 
     /// Deserialize from bytes.
     #[inline]
@@ -156,6 +191,7 @@ pub trait ToBytes: Serialize {
     {
         deserialize!(reader: reader, option: bincode::options().with_native_endian())
     }
+    // ---------------------
     #[inline]
     fn from_be_bytes<'a>(bytes: &'a [u8]) -> Self
     where
@@ -201,7 +237,10 @@ pub trait ToBytes: Serialize {
 
     // ------------- default endians -------------
     #[inline]
-    fn try_to_bytes(&self) -> Result<Vec<u8>> {
+    fn try_to_bytes(&self) -> Result<Vec<u8>>
+    where
+        Self: Serialize,
+    {
         match Self::OPTIONS.endian {
             Endian::Big => self.try_to_be_bytes(),
             Endian::Little => self.try_to_le_bytes(),
@@ -209,7 +248,10 @@ pub trait ToBytes: Serialize {
         }
     }
     #[inline]
-    fn try_to_bytes_into(&self, writer: impl io::Write) -> Result<()> {
+    fn try_to_bytes_into(&self, writer: impl io::Write) -> Result<()>
+    where
+        Self: Serialize,
+    {
         match Self::OPTIONS.endian {
             Endian::Big => self.try_to_be_bytes_into(writer),
             Endian::Little => self.try_to_le_bytes_into(writer),
@@ -240,11 +282,17 @@ pub trait ToBytes: Serialize {
     }
     // --------------------------------------------------
     #[inline]
-    fn to_bytes(&self) -> Vec<u8> {
+    fn to_bytes(&self) -> Vec<u8>
+    where
+        Self: Serialize,
+    {
         self.try_to_bytes().unwrap()
     }
     #[inline]
-    fn to_bytes_into(&self, writer: impl io::Write) {
+    fn to_bytes_into(&self, writer: impl io::Write)
+    where
+        Self: Serialize,
+    {
         self.try_to_bytes_into(writer).unwrap()
     }
     #[inline]
@@ -266,23 +314,35 @@ pub trait ToBytes: Serialize {
 /// # A trait that can hash bytes.
 pub trait ToHash: ToBytes {
     #[inline]
-    fn try_to_hash<T: Digest + io::Write>(&self) -> Result<Output<T>> {
+    fn try_to_hash<T: Digest + io::Write>(&self) -> Result<Output<T>>
+    where
+        Self: Serialize,
+    {
         let mut hasher = T::new();
         self.try_to_hash_into(&mut hasher)?;
         Ok(hasher.finalize())
     }
     #[inline]
-    fn try_to_hash_into<T: Digest + io::Write>(&self, hasher: &mut T) -> Result<()> {
+    fn try_to_hash_into<T: Digest + io::Write>(&self, hasher: &mut T) -> Result<()>
+    where
+        Self: Serialize,
+    {
         self.try_to_bytes_into(hasher)
     }
     #[inline]
-    fn to_hash<T: Digest + io::Write>(&self) -> Output<T> {
+    fn to_hash<T: Digest + io::Write>(&self) -> Output<T>
+    where
+        Self: Serialize,
+    {
         let mut hasher = T::new();
         self.to_hash_into(&mut hasher);
         hasher.finalize()
     }
     #[inline]
-    fn to_hash_into<T: Digest + io::Write>(&self, hasher: &mut T) {
+    fn to_hash_into<T: Digest + io::Write>(&self, hasher: &mut T)
+    where
+        Self: Serialize,
+    {
         self.to_bytes_into(hasher)
     }
 }
@@ -463,6 +523,19 @@ pub trait ToHex: AsRef<[u8]> {
     }
 }
 
+/// A trait for creating [`Vec<u8>`] from [`AsRef<[u8]>`]
+pub trait ToBytesForRef: AsRef<[u8]> {
+    fn to_bytes(&self) -> Vec<u8> {
+        self.as_ref().to_vec()
+    }
+    fn try_to_bytes_into(&self, mut writer: impl io::Write) -> Result<()> {
+        writer.write_all(self.as_ref()).map_err(Error::Io)
+    }
+    fn to_bytes_into(&self, mut writer: impl io::Write) {
+        writer.write_all(self.as_ref()).unwrap()
+    }
+}
+impl<T: AsRef<[u8]>> ToBytesForRef for T {}
 impl<T: AsRef<[u8]>> ToHex for T {}
 
 #[cfg(test)]
@@ -537,6 +610,21 @@ mod tests {
         let be_bytes = test.to_be_bytes();
         let le_bytes = test.to_le_bytes();
         assert_ne!(be_bytes, le_bytes);
+    }
+
+    #[test]
+    fn test_to_bytes_for_ref() {
+        let s = "Hello world".to_string();
+        let bytes = s.to_bytes();
+        let bytes2 = s.as_bytes().to_vec();
+        let bytes3 = s.into_bytes();
+        assert_eq!(bytes, bytes2);
+        assert_eq!(bytes, bytes3);
+
+        let arr = [1u8, 2, 3, 4, 5];
+        let bytes = arr.to_bytes();
+        let bytes2 = arr.to_vec();
+        assert_eq!(bytes, bytes2);
     }
 
     #[test]

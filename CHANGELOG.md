@@ -5,10 +5,12 @@
 ## Added
 
 - Added const fn `ToBytesOptions::default()`.
+- Added `ToBytesForRef` functional trait for creating `Vec<u8>` from `AsRef<[u8]>`.
 
 ## Improved
 
 - Refactor Cargo.toml: dependency features.
+- It's okay to derive `ToBytes` without `serde::Serialize`. But if you want to use the methods of de/serialization, you should derive `serde::Serialize` or `serde::Deserialize`.
 
 ## [0.4.0] - 2022-12-13
 
