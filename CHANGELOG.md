@@ -11,6 +11,8 @@
 
 - Fixed `#[stdto::bytes(endian = "native")]` typo bug.
 
+Released by [@just-do-halee](https://github.com/just-do-halee).
+
 ## [0.3.0] - 2022-12-12
 
 ## BREAKING CHANGES
@@ -21,6 +23,8 @@
 ## Added
 
 - Added an attribute #[stdto::bytes(endian = "...")]. (little/big/native)
+
+Released by [@just-do-halee](https://github.com/just-do-halee).
 
 ## [0.2.0] - 2022-12-10
 

@@ -1,0 +1,8 @@
+pre-release-replacements = [
+    { file = "../../README.md", search = "stdto = \".*\"", replace = "stdto = \"{{version}}\"", exactly = 1 },
+    { file = "../../CHANGELOG.md", search = "unreleased", replace = "{{version}}", min = 1 },
+    { file = "../../CHANGELOG.md", search = "\\.\\.\\.HEAD", replace = "...{{tag_name}}", exactly = 1 },
+    { file = "../../CHANGELOG.md", search = "ReleaseDate", replace = "{{date}}", min = 1 },
+    { file = "../../CHANGELOG.md", search = "<!-- next-header -->", replace = "<!-- next-header -->\n\n## [unreleased] - ReleaseDate\n", exactly = 1 },
+    { file = "../../CHANGELOG.md", search = "<!-- next-url -->", replace = "<!-- next-url -->\n\n[unreleased]: https://github.com/just-do-halee/stdto/compare/{{tag_name}}...HEAD", exactly = 1 },
+]
