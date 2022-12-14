@@ -54,6 +54,20 @@ hash = test.to_hash::<Sha256>();
 ```
 
 ```rust
+#[stdto::json]
+struct Test {
+    a: u32,
+    b: String,
+    c: [u8; 32],
+    d: Vec<u8>,
+    e: HashMap<u8, f64>,
+}
+
+json = test.to_json();
+Test::from_json(json);
+```
+
+```rust
 // AsRef<[u8]> to hex
 
 hex = hash.to_hex();

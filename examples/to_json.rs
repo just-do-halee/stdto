@@ -2,7 +2,6 @@ use std::{collections::HashMap, error::Error};
 
 use stdto::prelude::*;
 
-#[stdto::serde]
 #[stdto::json]
 #[derive(Debug, PartialEq, Eq)]
 struct Test {

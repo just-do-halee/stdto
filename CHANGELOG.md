@@ -9,6 +9,7 @@
 
 ## Improved
 
+- No need to implement `#[stdo::serde]` anymore. Also no need to concern about conflicting `#[stdto::serde]` and `#[stdto::bytes]` and `#[stdto::json]`.
 - Changed all of `..from_bytes_..<'a>(..: &'a [u8])..` to `..from_bytes_..(..: impl AsRef<[u8]>)..`.
 - Added `as_bytes()`, `into_bytes()` in the `ToBytesForRef` trait.
 

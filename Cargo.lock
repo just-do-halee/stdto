@@ -153,6 +153,7 @@ dependencies = [
 name = "stdto"
 version = "0.5.0"
 dependencies = [
+ "serde",
  "sha2",
  "stdto_core",
  "stdto_derive",
@@ -175,6 +176,7 @@ name = "stdto_derive"
 version = "0.5.0"
 dependencies = [
  "heck",
+ "proc-macro2",
  "quote",
  "syn",
 ]

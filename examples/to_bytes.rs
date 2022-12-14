@@ -4,9 +4,6 @@ use std::{collections::HashMap, error::Error, io::Cursor};
 
 use stdto::prelude::*;
 
-// #[stdto::serde]
-// #[derive(ToBytes)]
-// same as
 #[stdto::bytes(endian = "big")]
 struct Test {
     a: u32,

@@ -33,6 +33,7 @@ stdto_core = { version = "0.5", path = "crates/stdto_core", default-features = f
 stdto_derive = { version = "0.5", path = "crates/stdto_derive", optional = true }
 
 [dev-dependencies]
+serde = "1.0.150"
 sha2 = "0.10"
 
 [features]

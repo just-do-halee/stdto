@@ -2,8 +2,8 @@ pub use core::fmt;
 pub use proc_macro::TokenStream;
 pub use quote::quote;
 pub use syn::{
-    parse_macro_input, AttributeArgs, DeriveInput, Error, Expr, Lit, Meta, MetaNameValue,
-    NestedMeta,
+    parse_macro_input, parse_quote, Attribute, AttributeArgs, DeriveInput, Error, Expr, Lit, Meta,
+    MetaList, MetaNameValue, NestedMeta,
 };
 
 pub const ROOT: &str = "stdto";
