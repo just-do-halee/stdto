@@ -351,24 +351,28 @@ pub trait ToHash: ToBytes {
 /// # A trait that can be converted to a hex string.
 pub trait ToJson {
     // --- Value ----
+    #[inline]
     fn try_to_json_value(&self) -> Result<Value>
     where
         Self: Serialize,
     {
         serde_json::to_value(self).map_err(Error::Json)
     }
+    #[inline]
     fn try_to_json_value_into(&self, writer: impl io::Write) -> Result<()>
     where
         Self: Serialize,
     {
         serde_json::to_writer(writer, self).map_err(Error::Json)
     }
+    #[inline]
     fn try_from_json_value(json: impl AsRef<[u8]>) -> Result<Value>
     where
         Self: DeserializeOwned,
     {
         serde_json::from_slice(json.as_ref()).map_err(Error::Json)
     }
+    #[inline]
     fn try_from_json_value_from(reader: impl io::Read) -> Result<Value>
     where
         Self: DeserializeOwned,
@@ -376,24 +380,28 @@ pub trait ToJson {
         serde_json::from_reader(reader).map_err(Error::Json)
     }
     // --------------
+    #[inline]
     fn to_json_value(&self) -> Value
     where
         Self: Serialize,
     {
         self.try_to_json_value().unwrap()
     }
+    #[inline]
     fn to_json_value_into(&self, writer: impl io::Write)
     where
         Self: Serialize,
     {
         self.try_to_json_value_into(writer).unwrap()
     }
+    #[inline]
     fn from_json_value(json: impl AsRef<[u8]>) -> Value
     where
         Self: DeserializeOwned,
     {
         Self::try_from_json_value(json).unwrap()
     }
+    #[inline]
     fn from_json_value_from(reader: impl io::Read) -> Value
     where
         Self: DeserializeOwned,
@@ -403,24 +411,28 @@ pub trait ToJson {
     // --------------
 
     // --- String ----
+    #[inline]
     fn try_to_json(&self) -> Result<String>
     where
         Self: Serialize,
     {
         serde_json::to_string(self).map_err(Error::Json)
     }
+    #[inline]
     fn try_to_json_into(&self, writer: impl io::Write) -> Result<()>
     where
         Self: Serialize,
     {
         serde_json::to_writer(writer, self).map_err(Error::Json)
     }
+    #[inline]
     fn try_from_json(json: impl AsRef<[u8]>) -> Result<Self>
     where
         Self: DeserializeOwned,
     {
         serde_json::from_slice(json.as_ref()).map_err(Error::Json)
     }
+    #[inline]
     fn try_from_json_from(reader: impl io::Read) -> Result<Self>
     where
         Self: DeserializeOwned,
@@ -428,24 +440,28 @@ pub trait ToJson {
         serde_json::from_reader(reader).map_err(Error::Json)
     }
     // --------------
+    #[inline]
     fn to_json(&self) -> String
     where
         Self: Serialize,
     {
         self.try_to_json().unwrap()
     }
+    #[inline]
     fn to_json_into(&self, writer: impl io::Write)
     where
         Self: Serialize,
     {
         self.try_to_json_into(writer).unwrap()
     }
+    #[inline]
     fn from_json(json: impl AsRef<[u8]>) -> Self
     where
         Self: DeserializeOwned,
     {
         Self::try_from_json(json).unwrap()
     }
+    #[inline]
     fn from_json_from(reader: impl io::Read) -> Self
     where
         Self: DeserializeOwned,
@@ -453,12 +469,14 @@ pub trait ToJson {
         Self::try_from_json_from(reader).unwrap()
     }
     // --------------
+    #[inline]
     fn try_to_json_pretty(&self) -> Result<String>
     where
         Self: Serialize,
     {
         serde_json::to_string_pretty(self).map_err(Error::Json)
     }
+    #[inline]
     fn try_to_json_pretty_into(&self, writer: impl io::Write) -> Result<()>
     where
         Self: Serialize,
@@ -466,12 +484,14 @@ pub trait ToJson {
         serde_json::to_writer_pretty(writer, self).map_err(Error::Json)
     }
     // --------------
+    #[inline]
     fn to_json_pretty(&self) -> String
     where
         Self: Serialize,
     {
         self.try_to_json_pretty().unwrap()
     }
+    #[inline]
     fn to_json_pretty_into(&self, writer: impl io::Write)
     where
         Self: Serialize,

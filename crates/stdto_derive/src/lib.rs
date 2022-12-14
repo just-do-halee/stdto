@@ -8,7 +8,6 @@ use bytes::*;
 #[proc_macro_attribute]
 pub fn serde(_: TokenStream, item: TokenStream) -> TokenStream {
     let mut ast = syn::parse_macro_input!(item as syn::DeriveInput);
-    // check the struct has implemented the Serialize or Deserialize traits from ast.attrs
     let mut has_serialize = false;
     let mut has_deserialize = false;
     for attr in &ast.attrs {
