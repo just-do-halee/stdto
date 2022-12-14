@@ -2,6 +2,9 @@
 
 ## [unreleased] - ReleaseDate
 
+
+## [0.6.0] - 2022-12-14
+
 ## Added
 
 - Added `ToJson` and `stdto::json` conversion.
@@ -75,7 +78,9 @@ Released by [@just-do-halee](https://github.com/just-do-halee).
 
 <!-- next-url -->
 
-[unreleased]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.5.0...HEAD
+[unreleased]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.6.0...HEAD
+
+[0.6.0]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.5.0...stdto_core-v0.6.0
 
 [0.5.0]: https://github.com/just-do-halee/stdto/compare/v0.4.0...stdto_core-v0.5.0
 
