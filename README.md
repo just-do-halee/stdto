@@ -22,6 +22,9 @@
 stdto = "0.6.0"
 ```
 
+## **`Goal`**
+As a blockchain developer who specializes in Rust, I often find it challenging to work with bytes, hashes, and JSON. The Rust ecosystem is decentralized and many popular crates are old and complex. This makes it difficult to find simple, well-abstracted solutions that are easy to understand. I created the Stdto crate to address this need. The goal of Stdto is to provide a standard library-like interface that makes it easy for users to work with and understand primitive data structures.
+
 ## **`How to`**
 
 ```rust
