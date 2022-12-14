@@ -173,7 +173,7 @@ dependencies = [
 
 [[package]]
 name = "stdto_derive"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "heck",
  "proc-macro2",
