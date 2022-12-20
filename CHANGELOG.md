@@ -2,6 +2,9 @@
 
 ## [unreleased] - ReleaseDate
 
+
+## [0.7.0] - 2022-12-20
+
 ## BREAKING CHANGES
 
 - features in Cargo.toml.
@@ -89,7 +92,9 @@ Released by [@just-do-halee](https://github.com/just-do-halee).
 
 <!-- next-url -->
 
-[unreleased]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.6.0...HEAD
+[unreleased]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.7.0...HEAD
+
+[0.7.0]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.6.0...stdto_core-v0.7.0
 
 [0.6.0]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.5.0...stdto_core-v0.6.0
 
