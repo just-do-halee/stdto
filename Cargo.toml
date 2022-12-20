@@ -5,7 +5,7 @@ version = "0.6.0"
 edition = "2021"
 authors = ["just-do-halee <just.do.halee@gmail.com>"]
 categories = ["development-tools", "rust-patterns", "encoding"]
-keywords = ["serde", "bytes", "hash", "json", "encoding"]
+keywords = ["serde", "bytes", "hash", "json", "hex"]
 description = "Stdto provides a set of functional traits for conversion between various data representations."
 homepage = "https://github.com/just-do-halee/stdto"
 repository = "https://github.com/just-do-halee/stdto"
@@ -22,27 +22,26 @@ edition = "2021"
 authors = ["just-do-halee <just.do.halee@gmail.com>"]
 description = "Stdto provides a set of functional traits for conversion between various data representations."
 categories = ["development-tools", "rust-patterns", "encoding"]
-keywords = ["serde", "bytes", "hash", "json", "encoding"]
+keywords = ["serde", "bytes", "hash", "json", "hex"]
 homepage = "https://github.com/just-do-halee/stdto"
 repository = "https://github.com/just-do-halee/stdto"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 
 [dependencies]
-stdto_core = { version = "0.6", path = "crates/stdto_core", default-features = false, optional = true }
+stdto_core = { version = "0.6", path = "crates/stdto_core", default-features = false }
 stdto_derive = { version = "0.6", path = "crates/stdto_derive", optional = true }
 
 [dev-dependencies]
 sha2 = "0.10"
 
 [features]
-default = ["core", "derive", "serde", "bytes", "hash", "json", "hex"]
+default = ["derive", "serde", "bytes", "hash", "json", "hex"]
 
-core = ["dep:stdto_core"]
 derive = ["dep:stdto_derive"]
 
-serde = ["core", "stdto_core?/serde"]
-bytes = ["core", "stdto_core?/bytes"]
-hash = ["core", "stdto_core?/hash"]
-json = ["core", "stdto_core?/json"]
-hex = ["core", "stdto_core?/hex"]
+serde = ["stdto_core/serde"]
+bytes = ["serde", "stdto_core/bytes"]
+hex = ["bytes", "stdto_core/hex"]
+hash = ["bytes", "stdto_core/hash"]
+json = ["serde", "stdto_core/json"]

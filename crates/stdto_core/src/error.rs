@@ -1,9 +1,13 @@
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
+    #[cfg(feature = "bytes")]
     #[error("bytes conversion error: {0}")]
     Bytes(#[from] bincode::Error),
+
+    #[cfg(feature = "json")]
     #[error("json conversion error: {0}")]
     Json(#[from] serde_json::Error),
+
     #[error("io error: {0}")]
     Io(#[from] std::io::Error),
     #[error("fmt error: {0}")]

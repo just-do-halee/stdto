@@ -1,12 +1,21 @@
+#![allow(unused_imports, unused_macros)]
+
 use crate::{
     enums::{Endian, HexMode},
     error::*,
 };
 use std::{fmt, io};
 
-use bincode::Options;
-use digest::{Digest, Output};
+#[cfg(feature = "serde")]
 use serde::{de::DeserializeOwned, Serialize};
+
+#[cfg(feature = "bytes")]
+use bincode::Options;
+
+#[cfg(feature = "hash")]
+use digest::{Digest, Output};
+
+#[cfg(feature = "json")]
 use serde_json::Value;
 
 macro_rules! serialize {
@@ -42,10 +51,12 @@ macro_rules! deserialize {
     };
 }
 
+#[cfg(feature = "bytes")]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct ToBytesOptions {
     pub endian: Endian,
 }
+#[cfg(feature = "bytes")]
 impl ToBytesOptions {
     #[inline]
     pub const fn default() -> Self {
@@ -55,6 +66,7 @@ impl ToBytesOptions {
     }
 }
 
+#[cfg(feature = "bytes")]
 /// # A trait that can de/serialize something with bytes. (default: little endian)
 pub trait ToBytes {
     const OPTIONS: ToBytesOptions = ToBytesOptions {
@@ -312,6 +324,7 @@ pub trait ToBytes {
     }
 }
 
+#[cfg(feature = "hash")]
 /// # A trait that can hash bytes.
 pub trait ToHash: ToBytes {
     #[inline]
@@ -348,6 +361,7 @@ pub trait ToHash: ToBytes {
     }
 }
 
+#[cfg(feature = "json")]
 /// # A trait that can be converted to a hex string.
 pub trait ToJson {
     // --- Value ----
@@ -501,6 +515,7 @@ pub trait ToJson {
     // --------------
 }
 
+#[cfg(feature = "bytes")]
 /// # A trait that can convert to a slice of bytes.
 pub trait AsBytes {
     fn as_byte_slice(&self) -> &[u8];
@@ -525,6 +540,7 @@ pub trait AsBytes {
     }
 }
 
+#[cfg(feature = "bytes")]
 /// implement `AsBytes` for `impl AsRef<[u8]>`
 impl<T: AsRef<[u8]>> AsBytes for T {
     #[inline]
@@ -533,6 +549,7 @@ impl<T: AsRef<[u8]>> AsBytes for T {
     }
 }
 
+#[cfg(feature = "hex")]
 /// # A trait that can convert bytes to hex string. (encode/decode)
 pub trait ToHex: AsBytes {
     #[inline]
@@ -719,9 +736,11 @@ pub trait ToHex: AsBytes {
     }
 }
 
+#[cfg(feature = "hex")]
 /// implement `ToHex` for `impl AsBytes`
 impl<T: AsBytes> ToHex for T {}
 
+#[cfg(feature = "bytes")]
 /// # A trait for converting a byte slice to a string.
 pub trait ToStringForBytes: AsBytes {
     #[inline]
@@ -766,6 +785,7 @@ pub trait ToStringForBytes: AsBytes {
     }
 }
 
+#[cfg(feature = "bytes")]
 /// implement `AsBytes` for `impl AsBytes`
 impl<T: AsBytes> ToStringForBytes for T {}
 
