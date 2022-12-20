@@ -16,8 +16,6 @@ pub enum Error {
     OutOfBounds(usize, usize),
     #[error("odd length")]
     OddLength,
-    #[error("try into errpr")]
-    TryIntoError,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
