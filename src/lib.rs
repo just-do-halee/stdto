@@ -7,7 +7,7 @@ pub mod prelude {
     #[cfg(feature = "bytes")]
     pub use stdto_core::{ToBytes, ToBytesForRef, ToStringForRef};
     #[cfg(all(feature = "bytes", feature = "derive"))]
-    pub use stdto_derive::ToBytes;
+    pub use stdto_derive::{DebugBytes, ToBytes};
 
     #[cfg(feature = "hash")]
     pub use stdto_core::ToHash;
@@ -21,6 +21,8 @@ pub mod prelude {
 
     #[cfg(feature = "hex")]
     pub use stdto_core::ToHex;
+    #[cfg(all(feature = "hex", feature = "derive"))]
+    pub use stdto_derive::DebugHex;
 }
 pub use prelude::*;
 

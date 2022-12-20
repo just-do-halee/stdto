@@ -119,3 +119,36 @@ fn impl_attribute_with_serde(item: TokenStream, attribute: Option<Attribute>) ->
     }
     quote!(#ast).into()
 }
+
+#[proc_macro_derive(DebugBytes)]
+pub fn debug_bytes(input: TokenStream) -> TokenStream {
+    let ast = parse_macro_input!(input as DeriveInput);
+    let name = &ast.ident;
+    let (impl_generics, ty_generics, where_clause) = &ast.generics.split_for_impl();
+    quote! {
+        impl #impl_generics core::fmt::Debug for #name #ty_generics #where_clause {
+            fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                write!(f, "#{:?}#", self.to_bytes())
+            }
+        }
+    }
+    .into()
+}
+
+#[proc_macro_derive(DebugHex)]
+pub fn debug_hex(input: TokenStream) -> TokenStream {
+    let ast = parse_macro_input!(input as DeriveInput);
+    let name = &ast.ident;
+    let (impl_generics, ty_generics, where_clause) = &ast.generics.split_for_impl();
+    quote! {
+        impl #impl_generics core::fmt::Debug for #name #ty_generics #where_clause {
+            fn fmt(&self, mut f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                use stdto::ToHex;
+                f.write_str("#\"")?;
+                self.to_bytes().try_to_upper_hex_into_with_0x(&mut f).map_err(|_| core::fmt::Error)?;
+                f.write_str("\"#")
+            }
+        }
+    }
+    .into()
+}

@@ -16,3 +16,15 @@ macro_rules! unwrap_error {
         }
     };
 }
+
+// #[inline]
+// pub fn has_derives(ast: &DeriveInput, targets: impl AsRef<[&'static str]>) -> bool {
+//     let mut targets = targets.as_ref().to_vec();
+//     for attr in &ast.attrs {
+//         if attr.path.is_ident("derive") {
+//             let derives = attr.tokens.to_string();
+//             targets.retain(|&x| !derives.contains(x));
+//         }
+//     }
+//     targets.is_empty()
+// }

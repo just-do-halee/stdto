@@ -2,6 +2,10 @@
 
 ## [unreleased] - ReleaseDate
 
+## Added
+
+- Added `DebugBytes` derive macro for debugging with automatic bytes representation when the `DebugBytes` is derived.
+- Added `DebugHex` derive macro for debugging with automatic hexadecimal string representation when the `DebugHex` is derived.
 
 ## [0.6.0] - 2022-12-14
 
