@@ -51,6 +51,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     test_custom()?;
 
     let s = "Hello world".to_string();
+    let as_bytes = s.as_byte_slice();
+    assert_eq!(as_bytes, s.as_bytes());
+
     let bytes = s.to_bytes();
     let bytes2 = s.as_bytes().to_vec();
     let bytes3 = s.into_bytes();

@@ -13,7 +13,7 @@ pub extern crate serde_json;
 #[cfg(feature = "bytes")]
 pub use crate::{
     enums::{Endian, HexMode},
-    traits::{ToBytes, ToBytesForRef, ToBytesOptions, ToStringForRef},
+    traits::{AsBytes, ToBytes, ToBytesOptions, ToStringForBytes},
 };
 
 #[cfg(feature = "hash")]

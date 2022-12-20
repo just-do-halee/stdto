@@ -501,15 +501,47 @@ pub trait ToJson {
     // --------------
 }
 
+/// # A trait that can convert to a slice of bytes.
+pub trait AsBytes {
+    fn as_byte_slice(&self) -> &[u8];
+    #[inline]
+    fn to_bytes(&self) -> Vec<u8> {
+        self.as_byte_slice().to_vec()
+    }
+    #[inline]
+    fn into_bytes(self) -> Vec<u8>
+    where
+        Self: Sized,
+    {
+        self.to_bytes()
+    }
+    #[inline]
+    fn try_to_bytes_into(&self, mut writer: impl io::Write) -> Result<()> {
+        writer.write_all(self.as_byte_slice()).map_err(Error::Io)
+    }
+    #[inline]
+    fn to_bytes_into(&self, writer: impl io::Write) {
+        self.try_to_bytes_into(writer).unwrap()
+    }
+}
+
+/// implement `AsBytes` for `impl AsRef<[u8]>`
+impl<T: AsRef<[u8]>> AsBytes for T {
+    #[inline]
+    fn as_byte_slice(&self) -> &[u8] {
+        self.as_ref()
+    }
+}
+
 /// # A trait that can convert bytes to hex string. (encode/decode)
-pub trait ToHex: AsRef<[u8]> {
+pub trait ToHex: AsBytes {
     #[inline]
     fn try_to_hex_into_with_mode(&self, mut writer: impl fmt::Write, mode: HexMode) -> Result<()> {
         if mode.has_0x() {
             write!(writer, "0x")?;
         }
         let is_lower = mode.is_lower();
-        for byte in self.as_ref() {
+        for byte in self.as_byte_slice() {
             if is_lower {
                 write!(writer, "{:02x}", byte)?;
             } else {
@@ -521,7 +553,7 @@ pub trait ToHex: AsRef<[u8]> {
     #[inline]
     fn try_to_hex_with_mode(&self, mode: HexMode) -> Result<String> {
         let mut hex = String::with_capacity(
-            self.as_ref().len() * 2 + if mode.has_0x() { 2 } else { 0 }, //
+            self.as_byte_slice().len() * 2 + if mode.has_0x() { 2 } else { 0 }, //
         );
         self.try_to_hex_into_with_mode(&mut hex, mode)?;
         Ok(hex)
@@ -687,10 +719,14 @@ pub trait ToHex: AsRef<[u8]> {
     }
 }
 
-pub trait ToStringForRef: AsRef<[u8]> {
+/// implement `ToHex` for `impl AsBytes`
+impl<T: AsBytes> ToHex for T {}
+
+/// # A trait for converting a byte slice to a string.
+pub trait ToStringForBytes: AsBytes {
     #[inline]
     fn try_as_str(&self) -> Result<&str> {
-        std::str::from_utf8(self.as_ref()).map_err(Error::Utf8)
+        std::str::from_utf8(self.as_byte_slice()).map_err(Error::Utf8)
     }
     #[inline]
     fn try_to_string(&self) -> Result<String> {
@@ -710,7 +746,7 @@ pub trait ToStringForRef: AsRef<[u8]> {
     }
     #[inline]
     fn to_string_lossy(&self) -> String {
-        String::from_utf8_lossy(self.as_ref()).to_string()
+        String::from_utf8_lossy(self.as_byte_slice()).to_string()
     }
     #[inline]
     fn try_into_string(self) -> Result<String>
@@ -729,35 +765,9 @@ pub trait ToStringForRef: AsRef<[u8]> {
         self.to_string()
     }
 }
-/// # A trait for creating [`Vec<u8>`] from `AsRef<[u8]>`
-pub trait ToBytesForRef: AsRef<[u8]> {
-    #[inline]
-    fn as_bytes(&self) -> &[u8] {
-        self.as_ref()
-    }
-    #[inline]
-    fn into_bytes(self) -> Vec<u8>
-    where
-        Self: Sized,
-    {
-        self.as_ref().to_vec()
-    }
-    #[inline]
-    fn to_bytes(&self) -> Vec<u8> {
-        self.into_bytes()
-    }
-    #[inline]
-    fn try_to_bytes_into(&self, mut writer: impl io::Write) -> Result<()> {
-        writer.write_all(self.as_ref()).map_err(Error::Io)
-    }
-    #[inline]
-    fn to_bytes_into(&self, mut writer: impl io::Write) {
-        writer.write_all(self.as_ref()).unwrap()
-    }
-}
-impl<T: AsRef<[u8]>> ToStringForRef for T {}
-impl<T: AsRef<[u8]>> ToBytesForRef for T {}
-impl<T: AsRef<[u8]>> ToHex for T {}
+
+/// implement `AsBytes` for `impl AsBytes`
+impl<T: AsBytes> ToStringForBytes for T {}
 
 #[cfg(test)]
 mod tests {

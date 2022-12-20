@@ -4,6 +4,9 @@
 
 ## Added
 
+- Added `AsBytes` for general purpose trait.
+- Refactor `ToHex` and `ToStringForRef`.
+- Renamed `ToStringForRef` to `ToStringForBytes`.
 - Added `DebugBytes` derive macro for debugging with automatic bytes representation when the `DebugBytes` is derived.
 - Added `DebugHex` derive macro for debugging with automatic hexadecimal string representation when the `DebugHex` is derived.
 
