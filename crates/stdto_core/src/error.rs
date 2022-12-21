@@ -9,6 +9,17 @@ pub enum Error {
     #[error("json conversion error: {0}")]
     Json(#[from] serde_json::Error),
 
+    #[cfg(feature = "yaml")]
+    #[error("yaml conversion error: {0}")]
+    Yaml(#[from] serde_yaml::Error),
+
+    #[cfg(feature = "toml")]
+    #[error("toml conversion error: {0}")]
+    TomlSerialize(#[from] toml::ser::Error),
+    #[cfg(feature = "toml")]
+    #[error("toml conversion error: {0}")]
+    TomlDeserialize(#[from] toml::de::Error),
+
     #[error("io error: {0}")]
     Io(#[from] std::io::Error),
     #[error("fmt error: {0}")]

@@ -19,6 +19,16 @@ pub mod prelude {
     #[cfg(all(feature = "json", feature = "derive"))]
     pub use stdto_derive::ToJson;
 
+    #[cfg(feature = "yaml")]
+    pub use stdto_core::ToYaml;
+    #[cfg(all(feature = "yaml", feature = "derive"))]
+    pub use stdto_derive::ToYaml;
+
+    #[cfg(feature = "toml")]
+    pub use stdto_core::ToToml;
+    #[cfg(all(feature = "toml", feature = "derive"))]
+    pub use stdto_derive::ToToml;
+
     #[cfg(feature = "hex")]
     pub use stdto_core::ToHex;
     #[cfg(all(feature = "hex", feature = "derive"))]
@@ -56,6 +66,19 @@ pub use stdto_derive::json;
 
 // -----------------------------------------------------
 
+#[cfg(feature = "yaml")]
+pub use stdto_core::serde_yaml;
+#[cfg(all(feature = "yaml", feature = "derive"))]
+pub use stdto_derive::yaml;
+
+// -----------------------------------------------------
+
+#[cfg(feature = "toml")]
+pub use stdto_core::serde_toml;
+#[cfg(all(feature = "toml", feature = "derive"))]
+pub use stdto_derive::toml;
+
+// -----------------------------------------------------
 #[cfg(feature = "hex")]
 pub use stdto_core::HexMode;
 

@@ -36,7 +36,17 @@ stdto_derive = { version = "0.8", path = "crates/stdto_derive", optional = true 
 sha2 = "0.10"
 
 [features]
-default = ["derive", "serde", "bytes", "hash", "json", "hex"]
+default = [
+    "derive",
+    "serde",
+    "bytes",
+    "hash",
+    "json",
+    "yaml",
+    "toml",
+    "file",
+    "hex",
+]
 
 derive = ["dep:stdto_derive"]
 
@@ -45,3 +55,6 @@ bytes = ["serde", "stdto_core/bytes"]
 hex = ["bytes", "stdto_core/hex"]
 hash = ["bytes", "stdto_core/hash"]
 json = ["serde", "stdto_core/json"]
+yaml = ["serde", "stdto_core/yaml"]
+toml = ["serde", "stdto_core/toml"]
+file = ["json", "yaml", "toml"]

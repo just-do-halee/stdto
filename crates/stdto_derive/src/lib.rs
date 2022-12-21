@@ -87,22 +87,9 @@ pub fn hash(_: TokenStream, item: TokenStream) -> TokenStream {
     .into()
 }
 
-#[proc_macro_derive(ToJson)]
-pub fn to_json(input: TokenStream) -> TokenStream {
-    let ast = syn::parse_macro_input!(input as syn::DeriveInput);
-    let name = &ast.ident;
-    let (impl_generics, ty_generics, where_clause) = &ast.generics.split_for_impl();
-    quote! {
-        impl #impl_generics stdto::ToJson for #name #ty_generics #where_clause {
-        }
-    }
-    .into()
-}
-
-#[proc_macro_attribute]
-pub fn json(_: TokenStream, item: TokenStream) -> TokenStream {
-    impl_attribute_with_serde(item, Some(parse_quote!(#[derive(stdto::ToJson)])))
-}
+simple_single_derive!(json, ToJson);
+simple_single_derive!(yaml, ToYaml);
+simple_single_derive!(toml, ToToml);
 
 fn impl_attribute_with_serde(item: TokenStream, attribute: Option<Attribute>) -> TokenStream {
     let mut ast = syn::parse_macro_input!(item as syn::DeriveInput);

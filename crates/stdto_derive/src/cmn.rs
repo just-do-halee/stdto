@@ -1,4 +1,5 @@
 pub use core::fmt;
+pub use paste::paste;
 pub use proc_macro::TokenStream;
 pub use quote::quote;
 pub use syn::{
@@ -13,6 +14,29 @@ macro_rules! unwrap_error {
         match $expr {
             Ok(value) => value,
             Err(err) => return err.to_compile_error().into(),
+        }
+    };
+}
+
+macro_rules! simple_single_derive {
+    ($name:tt, $derive_name:tt) => {
+        paste! {
+        #[proc_macro_derive($derive_name)]
+        pub fn [<to_ $name>](input: TokenStream) -> TokenStream {
+            let ast = syn::parse_macro_input!(input as syn::DeriveInput);
+            let name = &ast.ident;
+            let (impl_generics, ty_generics, where_clause) = &ast.generics.split_for_impl();
+            quote! {
+                impl #impl_generics stdto::$derive_name for #name #ty_generics #where_clause {
+                }
+            }
+            .into()
+        }
+
+        #[proc_macro_attribute]
+        pub fn $name(_: TokenStream, item: TokenStream) -> TokenStream {
+            impl_attribute_with_serde(item, Some(parse_quote!(#[derive(stdto::$derive_name)])))
+        }
         }
     };
 }

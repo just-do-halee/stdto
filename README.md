@@ -29,13 +29,16 @@ As a blockchain developer who specializes in Rust, I often find it challenging t
 ## **`Features`**
 
 ```toml
-default = ["derive", "serde", "bytes", "hash", "json", "hex"]
+default = ["derive", "serde", "bytes", "hash", "json", "yaml", "toml", "file", "hex"]
 ```
 ```sh
-cargo add stdto  # [derive, serde, bytes, hash, json, hex]
+cargo add stdto  # [derive, serde, bytes, hash, json, yaml, toml, file, hex]
 cargo add stdto --features "derive bytes" # [derive, serde, bytes]
 cargo add stdto --features "derive hash" # [derive, serde, bytes, hash]
 cargo add stdto --features "derive json" # [derive, serde, json]
+cargo add stdto --features "derive yaml" # [derive, serde, yaml]
+cargo add stdto --features "derive toml" # [derive, serde, toml]
+cargo add stdto --features "derive file" # [derive, serde, json, yaml, toml]
 cargo add stdto --features "derive hex" # [derive, serde, bytes, hex]
 ```
 
@@ -74,6 +77,8 @@ let hash = test.to_hash::<sha2::Sha256>();
 
 ```rust
 #[stdto::json]
+// #[stdto::yaml]
+// #[stdto::toml]
 struct Test {
     ...
 }
@@ -81,6 +86,11 @@ struct Test {
 let json = test.to_json();
 let test = Test::from_json(json);
 // Test::try_from_json(json).unwrap();
+
+// let yaml = test.to_yaml();
+// let test = Test::from_yaml(yaml);
+// let toml = test.to_toml();
+// let test = Test::from_toml(toml);
 ```
 
 ```rust
