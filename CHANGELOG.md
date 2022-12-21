@@ -2,6 +2,11 @@
 
 ## [unreleased] - ReleaseDate
 
+## Improved
+
+- Added `#[non_exhaustive]` attribute on the Error enum and Endian enum.
+
+Released by [@just-do-halee](https://github.com/just-do-halee).
 
 ## [0.7.0] - 2022-12-20
 
@@ -16,6 +21,8 @@
 - Renamed `ToStringForRef` to `ToStringForBytes`.
 - Added `DebugBytes` derive macro for debugging with automatic bytes representation when the `DebugBytes` is derived.
 - Added `DebugHex` derive macro for debugging with automatic hexadecimal string representation when the `DebugHex` is derived.
+
+Released by [@just-do-halee](https://github.com/just-do-halee).
 
 ## [0.6.0] - 2022-12-14
 

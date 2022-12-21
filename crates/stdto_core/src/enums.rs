@@ -2,6 +2,7 @@
 
 use core::fmt;
 
+#[non_exhaustive]
 #[derive(Default, Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Endian {
     Big,

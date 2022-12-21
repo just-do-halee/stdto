@@ -815,7 +815,7 @@ mod tests {
             d: vec![1, 2, 3],
         };
         let bytes = test.to_bytes();
-        let test2 = Test::from_bytes(&bytes);
+        let test2 = Test::from_bytes(bytes);
         if test != test2 {
             panic!("test != test2");
         }
@@ -830,7 +830,7 @@ mod tests {
             d: vec![1, 2, 3],
         };
         let bytes = test.to_bytes();
-        let test2 = Test::from_bytes(&bytes);
+        let test2 = Test::from_bytes(bytes);
         if test != test2 {
             panic!("test != test2");
         }
@@ -1026,7 +1026,7 @@ mod tests {
     fn test_try_from_hex() {
         let bytes = b"hello world";
         let hex = bytes.to_hex();
-        let bytes2 = Vec::<u8>::try_from_hex(&hex).unwrap();
+        let bytes2 = Vec::<u8>::try_from_hex(hex).unwrap();
         assert_eq!(bytes, &bytes2[..]);
     }
 
