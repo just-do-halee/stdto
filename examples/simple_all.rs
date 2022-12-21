@@ -1,5 +1,3 @@
-#![allow(unreachable_code, unused_mut)]
-
 use std::{collections::BTreeMap, error::Error};
 
 use stdto::prelude::*;
@@ -48,6 +46,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let debuged = format!("{:?}", all);
     assert_eq!(debuged, "#\"0x01000000050000000000000068656C6C6F050505050505050505050505050505050505050505050505050505050505050520000000000000000303030303030303030303030303030303030303030303030303030303030303020000000000000003000000000000004D616E14000000000000000400000000000000546573740A00000000000000\"#");
+
     let json = all.to_json();
     all2 = All::from_json(json);
     assert_eq!(all, all2);
