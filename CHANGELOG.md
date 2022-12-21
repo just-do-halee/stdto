@@ -3,6 +3,13 @@
 ## [unreleased] - ReleaseDate
 
 
+## Improved
+
+- Default export `AsBytes` trait.
+- Fixed all of `AsRef<[u8]>` to `AsBytes`.
+
+Released by [@just-do-halee](https://github.com/just-do-halee).
+
 ## [0.9.0] - 2022-12-21
 
 ## BREAKING CHANGES

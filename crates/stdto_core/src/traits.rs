@@ -57,6 +57,38 @@ macro_rules! deserialize {
     };
 }
 
+/// # A trait that can convert to a slice of bytes.
+pub trait AsBytes {
+    fn as_byte_slice(&self) -> &[u8];
+    #[inline]
+    fn to_bytes(&self) -> Vec<u8> {
+        self.as_byte_slice().to_vec()
+    }
+    #[inline]
+    fn into_bytes(self) -> Vec<u8>
+    where
+        Self: Sized,
+    {
+        self.to_bytes()
+    }
+    #[inline]
+    fn try_to_bytes_into(&self, mut writer: impl io::Write) -> Result<()> {
+        writer.write_all(self.as_byte_slice()).map_err(Error::Io)
+    }
+    #[inline]
+    fn to_bytes_into(&self, writer: impl io::Write) {
+        self.try_to_bytes_into(writer).unwrap()
+    }
+}
+
+/// implement `AsBytes` for `impl AsRef<[u8]>`
+impl<T: AsRef<[u8]>> AsBytes for T {
+    #[inline]
+    fn as_byte_slice(&self) -> &[u8] {
+        self.as_ref()
+    }
+}
+
 #[cfg(feature = "bytes")]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct ToBytesOptions {
@@ -169,25 +201,25 @@ pub trait ToBytes {
 
     /// Deserialize from bytes.
     #[inline]
-    fn try_from_be_bytes(bytes: impl AsRef<[u8]>) -> Result<Self>
+    fn try_from_be_bytes(bytes: impl AsBytes) -> Result<Self>
     where
         Self: DeserializeOwned,
     {
-        deserialize!(data: bytes.as_ref(), option: bincode::options().with_big_endian())
+        deserialize!(data: bytes.as_byte_slice(), option: bincode::options().with_big_endian())
     }
     #[inline]
-    fn try_from_le_bytes(bytes: impl AsRef<[u8]>) -> Result<Self>
+    fn try_from_le_bytes(bytes: impl AsBytes) -> Result<Self>
     where
         Self: DeserializeOwned,
     {
-        deserialize!(data: bytes.as_ref(), option: bincode::options().with_little_endian())
+        deserialize!(data: bytes.as_byte_slice(), option: bincode::options().with_little_endian())
     }
     #[inline]
-    fn try_from_ne_bytes(bytes: impl AsRef<[u8]>) -> Result<Self>
+    fn try_from_ne_bytes(bytes: impl AsBytes) -> Result<Self>
     where
         Self: DeserializeOwned,
     {
-        deserialize!(data: bytes.as_ref(), option: bincode::options().with_native_endian())
+        deserialize!(data: bytes.as_byte_slice(), option: bincode::options().with_native_endian())
     }
     #[inline]
     fn try_from_be_bytes_from(reader: impl io::Read) -> Result<Self>
@@ -212,21 +244,21 @@ pub trait ToBytes {
     }
     // ---------------------
     #[inline]
-    fn from_be_bytes(bytes: impl AsRef<[u8]>) -> Self
+    fn from_be_bytes(bytes: impl AsBytes) -> Self
     where
         Self: DeserializeOwned,
     {
         Self::try_from_be_bytes(bytes).unwrap()
     }
     #[inline]
-    fn from_le_bytes(bytes: impl AsRef<[u8]>) -> Self
+    fn from_le_bytes(bytes: impl AsBytes) -> Self
     where
         Self: DeserializeOwned,
     {
         Self::try_from_le_bytes(bytes).unwrap()
     }
     #[inline]
-    fn from_ne_bytes(bytes: impl AsRef<[u8]>) -> Self
+    fn from_ne_bytes(bytes: impl AsBytes) -> Self
     where
         Self: DeserializeOwned,
     {
@@ -278,7 +310,7 @@ pub trait ToBytes {
         }
     }
     #[inline]
-    fn try_from_bytes(bytes: impl AsRef<[u8]>) -> Result<Self>
+    fn try_from_bytes(bytes: impl AsBytes) -> Result<Self>
     where
         Self: DeserializeOwned,
     {
@@ -315,7 +347,7 @@ pub trait ToBytes {
         self.try_to_bytes_into(writer).unwrap()
     }
     #[inline]
-    fn from_bytes(bytes: impl AsRef<[u8]>) -> Self
+    fn from_bytes(bytes: impl AsBytes) -> Self
     where
         Self: DeserializeOwned,
     {
@@ -754,8 +786,8 @@ pub trait ToHex: AsBytes {
         Ok(hex)
     }
     #[inline]
-    fn try_from_hex(hex: impl AsRef<[u8]>) -> Result<Vec<u8>> {
-        let hex = hex.as_ref();
+    fn try_from_hex(hex: impl AsBytes) -> Result<Vec<u8>> {
+        let hex = hex.as_byte_slice();
         let hex = if hex.starts_with(&[b'0', b'x']) {
             &hex[2..]
         } else {
@@ -805,11 +837,11 @@ pub trait ToHex: AsBytes {
         Ok(v)
     }
     #[inline]
-    fn try_copy_from_hex(&mut self, hex: impl AsRef<[u8]>) -> Result<usize>
+    fn try_copy_from_hex(&mut self, hex: impl AsBytes) -> Result<usize>
     where
         Self: AsMut<[u8]>,
     {
-        let hex = hex.as_ref();
+        let hex = hex.as_byte_slice();
         let hex = if hex.starts_with(&[b'0', b'x']) {
             &hex[2..]
         } else {
@@ -898,7 +930,7 @@ pub trait ToHex: AsBytes {
     }
 
     #[inline]
-    fn from_hex(hex: impl AsRef<[u8]>) -> Vec<u8> {
+    fn from_hex(hex: impl AsBytes) -> Vec<u8> {
         Self::try_from_hex(hex).unwrap()
     }
     #[inline]
@@ -906,7 +938,7 @@ pub trait ToHex: AsBytes {
         Self::try_from_hex_from(reader).unwrap()
     }
     #[inline]
-    fn copy_from_hex(&mut self, hex: impl AsRef<[u8]>) -> usize
+    fn copy_from_hex(&mut self, hex: impl AsBytes) -> usize
     where
         Self: AsMut<[u8]>,
     {
@@ -917,40 +949,6 @@ pub trait ToHex: AsBytes {
 #[cfg(feature = "hex")]
 /// implement `ToHex` for `impl AsBytes`
 impl<T: AsBytes> ToHex for T {}
-
-#[cfg(feature = "bytes")]
-/// # A trait that can convert to a slice of bytes.
-pub trait AsBytes {
-    fn as_byte_slice(&self) -> &[u8];
-    #[inline]
-    fn to_bytes(&self) -> Vec<u8> {
-        self.as_byte_slice().to_vec()
-    }
-    #[inline]
-    fn into_bytes(self) -> Vec<u8>
-    where
-        Self: Sized,
-    {
-        self.to_bytes()
-    }
-    #[inline]
-    fn try_to_bytes_into(&self, mut writer: impl io::Write) -> Result<()> {
-        writer.write_all(self.as_byte_slice()).map_err(Error::Io)
-    }
-    #[inline]
-    fn to_bytes_into(&self, writer: impl io::Write) {
-        self.try_to_bytes_into(writer).unwrap()
-    }
-}
-
-#[cfg(feature = "bytes")]
-/// implement `AsBytes` for `impl AsRef<[u8]>`
-impl<T: AsRef<[u8]>> AsBytes for T {
-    #[inline]
-    fn as_byte_slice(&self) -> &[u8] {
-        self.as_ref()
-    }
-}
 
 #[cfg(feature = "bytes")]
 /// # A trait for converting a byte slice to a string.
