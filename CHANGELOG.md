@@ -3,6 +3,9 @@
 ## [unreleased] - ReleaseDate
 
 
+## [0.10.0] - 2022-12-21
+
+
 ## Improved
 
 - Default export `AsBytes` trait.
@@ -123,7 +126,9 @@ Released by [@just-do-halee](https://github.com/just-do-halee).
 
 <!-- next-url -->
 
-[unreleased]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.9.0...HEAD
+[unreleased]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.10.0...HEAD
+
+[0.10.0]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.9.0...stdto_core-v0.10.0
 
 [0.9.0]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.8.0...stdto_core-v0.9.0
 
