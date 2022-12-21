@@ -32,13 +32,14 @@ As a blockchain developer who specializes in Rust, I often find it challenging t
 default = ["derive", "serde", "bytes", "hash", "json", "hex"]
 ```
 ```sh
+cargo add stdto  # [derive, serde, bytes, hash, json, hex]
 cargo add stdto --features "derive bytes" # [derive, serde, bytes]
 cargo add stdto --features "derive hash" # [derive, serde, bytes, hash]
 cargo add stdto --features "derive json" # [derive, serde, json]
 cargo add stdto --features "derive hex" # [derive, serde, bytes, hex]
 ```
 
-## **`Examples`**
+## [**`Examples`**](./examples/)
 
 ```rust
 use stdto::prelude::*;
@@ -55,8 +56,9 @@ struct Test {
     e: HashMap<u8, f64>,
 }
 
-bytes = test.to_bytes();
-Test::from_bytes(bytes);
+let bytes = Test { .. }.to_bytes();
+let test = Test::from_bytes(bytes);
+// Test::try_from_bytes(bytes).unwrap();
 ```
 
 ```rust
@@ -66,40 +68,40 @@ struct Test {
     ...
 }
 
-hash = test.to_hash::<Sha256>();
+let hash = test.to_hash::<sha2::Sha256>();
+// Any digest crate implemented hasher type
 ```
 
 ```rust
 #[stdto::json]
 struct Test {
-    a: u32,
-    b: String,
-    c: [u8; 32],
-    d: Vec<u8>,
-    e: HashMap<u8, f64>,
+    ...
 }
 
-json = test.to_json();
-Test::from_json(json);
+let json = test.to_json();
+let test = Test::from_json(json);
+// Test::try_from_json(json).unwrap();
 ```
 
 ```rust
-// AsRef<[u8]> to hex
+// Any AsRef<[u8]> or AsBytes implemented to hex
 
-hex = hash.to_hex();
-Vec::<u8>::from_hex(hex);
+let hex = bytes.to_hex();
+let hex = hash.to_hex();
+let bytes = Vec::<u8>::from_hex(hex);
+// Vec::<u8>::try_from_hex(hex).unwrap();
 
-mut arr = [0u8; 32];
+let mut arr = [0u8; 32];
 arr.copy_from_hex(hex);
 ```
 
 ```rust
-// AsRef<[u8]> <-> String, &str
+// Any AsRef<[u8]> or AsBytes implemented <-> String, &str
 
-arr = [72, 105, 77, 111, 109];
-s1 = arr.into_string();
-bytes = s1.to_bytes();
-s2 = bytes.as_str();
+let arr = [72, 105, 77, 111, 109];
+let s1 = arr.into_string(); // .try_into_string().unwrap();
+let bytes = s1.to_bytes();
+let s2 = bytes.as_str(); // .try_as_str().unwrap();
 
 assert_eq!(s1, s2);
 ```
