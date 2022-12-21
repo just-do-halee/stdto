@@ -30,7 +30,7 @@ readme = "README.md"
 
 [dependencies]
 stdto_core = { version = "0.10", path = "crates/stdto_core", default-features = false }
-stdto_derive = { version = "0.9", path = "crates/stdto_derive", optional = true }
+stdto_derive = { version = "0.10", path = "crates/stdto_derive", optional = true }
 
 [dev-dependencies]
 sha2 = "0.10"
