@@ -1,4 +1,4 @@
-use std::{collections::HashMap, error::Error};
+use std::{collections::BTreeMap, error::Error};
 
 use stdto::prelude::*;
 
@@ -9,7 +9,7 @@ struct Test {
     b: String,
     c: [u8; 32],
     d: Vec<u8>,
-    e: HashMap<String, u64>,
+    e: BTreeMap<String, u64>,
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -18,7 +18,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         b: "hello".to_owned(),
         c: [5; 32],
         d: vec![3; 32],
-        e: HashMap::from([("Hello".to_string(), 10), ("World".to_string(), 20)]),
+        e: BTreeMap::from([("Hello".to_string(), 10), ("World".to_string(), 20)]),
     };
     let toml = test.to_toml();
     let test2 = Test::from_toml(toml);
@@ -29,7 +29,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         b: "world".to_owned(),
         c: [14; 32],
         d: vec![12; 25],
-        e: HashMap::from([("Hello".to_string(), 10), ("World".to_string(), 20)]),
+        e: BTreeMap::from([("Hello".to_string(), 10), ("World".to_string(), 20)]),
     };
     let toml = test.to_toml_pretty();
     let test2 = Test::from_toml(toml);
@@ -48,7 +48,7 @@ struct All {
     b: String,
     c: [u8; 32],
     d: Vec<u8>,
-    e: HashMap<String, u64>,
+    e: BTreeMap<String, u64>,
 }
 
 /// Test to_bytes, from_bytes, to_hash, to_json, from_json, to_hex, from_hex
@@ -58,7 +58,7 @@ fn test_all() {
         b: "hello".to_owned(),
         c: [5; 32],
         d: vec![3; 32],
-        e: HashMap::from([("Test".to_string(), 10), ("Man".to_string(), 20)]),
+        e: BTreeMap::from([("Test".to_string(), 10), ("Man".to_string(), 20)]),
     };
     let bytes = all.to_bytes();
     let all2 = All::from_bytes(bytes);
@@ -67,15 +67,15 @@ fn test_all() {
     let hash: [u8; 32] = all.to_hash::<sha2::Sha256>().into();
     assert_eq!(
         hash.to_hex(),
-        "a4d8ad5f4c574bfdd3a4027290cb01c3f9fc11740296b5497512f009e40c10eb"
+        "23bf6d08f3c5a50748578af6e42d993d0068038656e02cb7eaa5794cc0c90a4f"
     );
     assert_eq!(
         hash.to_upper_hex(),
-        "A4D8AD5F4C574BFDD3A4027290CB01C3F9FC11740296B5497512F009E40C10EB"
+        "23BF6D08F3C5A50748578AF6E42D993D0068038656E02CB7EAA5794CC0C90A4F"
     );
     assert_eq!(
         hash.to_hex_with_0x(),
-        "0xa4d8ad5f4c574bfdd3a4027290cb01c3f9fc11740296b5497512f009e40c10eb"
+        "0x23bf6d08f3c5a50748578af6e42d993d0068038656e02cb7eaa5794cc0c90a4f"
     );
 
     let toml = all.to_toml();

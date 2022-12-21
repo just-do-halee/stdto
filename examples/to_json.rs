@@ -1,4 +1,4 @@
-use std::{collections::HashMap, error::Error};
+use std::{collections::BTreeMap, error::Error};
 
 use stdto::prelude::*;
 
@@ -9,7 +9,7 @@ struct Test {
     b: String,
     c: [u8; 32],
     d: Vec<u8>,
-    e: HashMap<u8, u64>,
+    e: BTreeMap<u8, u64>,
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -18,7 +18,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         b: "hello".to_owned(),
         c: [5; 32],
         d: vec![3; 32],
-        e: HashMap::from([(1, 10), (2, 20)]),
+        e: BTreeMap::from([(1, 10), (2, 20)]),
     };
     let json = test.to_json();
     let test2 = Test::from_json(json);
@@ -29,7 +29,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         b: "world".to_owned(),
         c: [14; 32],
         d: vec![12; 25],
-        e: HashMap::from([(3, 10), (4, 20)]),
+        e: BTreeMap::from([(3, 10), (4, 20)]),
     };
     let json = test.to_json_pretty();
     let test2 = Test::from_json(json);
@@ -48,7 +48,7 @@ struct All {
     b: String,
     c: [u8; 32],
     d: Vec<u8>,
-    e: HashMap<u8, u64>,
+    e: BTreeMap<u8, u64>,
 }
 
 /// Test to_bytes, from_bytes, to_hash, to_json, from_json, to_hex, from_hex
@@ -58,7 +58,7 @@ fn test_all() {
         b: "hello".to_owned(),
         c: [5; 32],
         d: vec![3; 32],
-        e: HashMap::from([(1, 10), (2, 20)]),
+        e: BTreeMap::from([(1, 10), (2, 20)]),
     };
     let bytes = all.to_bytes();
     let all2 = All::from_bytes(bytes);

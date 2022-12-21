@@ -1,6 +1,6 @@
 #![allow(unreachable_code, unused_mut)]
 
-use std::{collections::HashMap, error::Error};
+use std::{collections::BTreeMap, error::Error};
 
 use stdto::prelude::*;
 
@@ -15,7 +15,7 @@ struct All {
     b: String,
     c: [u8; 32],
     d: Vec<u8>,
-    e: HashMap<String, u64>,
+    e: BTreeMap<String, u64>,
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -24,7 +24,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         b: "hello".to_owned(),
         c: [5; 32],
         d: vec![3; 32],
-        e: HashMap::from([("Test".to_string(), 10), ("Man".to_string(), 20)]),
+        e: BTreeMap::from([("Test".to_string(), 10), ("Man".to_string(), 20)]),
     };
     let mut all2: All;
 

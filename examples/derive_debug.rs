@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use stdto::prelude::*;
 
@@ -12,7 +12,7 @@ struct Test {
     b: String,
     c: [u8; 32],
     d: Vec<u8>,
-    e: HashMap<u8, f64>,
+    e: BTreeMap<u8, f64>,
 }
 
 #[stdto::bytes]
@@ -25,7 +25,7 @@ struct Test2 {
     b: String,
     c: [u8; 32],
     d: Vec<u8>,
-    e: HashMap<u8, f64>,
+    e: BTreeMap<u8, f64>,
 }
 
 fn main() {
@@ -34,7 +34,7 @@ fn main() {
         b: "test".to_string(),
         c: [5; 32],
         d: vec![3; 32],
-        e: HashMap::new(),
+        e: BTreeMap::new(),
     };
     let debuged = format!("{:?}", origin);
     assert_eq!(debuged, "#[1, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 116, 101, 115, 116, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 32, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0]#");
@@ -44,7 +44,7 @@ fn main() {
         b: "test".to_string(),
         c: [5; 32],
         d: vec![3; 32],
-        e: HashMap::new(),
+        e: BTreeMap::new(),
     };
     let debuged = format!("{:?}", origin2);
     assert_eq!(debuged, "#\"0x010000000400000000000000746573740505050505050505050505050505050505050505050505050505050505050505200000000000000003030303030303030303030303030303030303030303030303030303030303030000000000000000\"#");

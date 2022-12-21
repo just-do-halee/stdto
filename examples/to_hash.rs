@@ -1,4 +1,4 @@
-use std::{collections::HashMap, error::Error};
+use std::{collections::BTreeMap, error::Error};
 
 use stdto::prelude::*;
 
@@ -9,7 +9,7 @@ struct Test {
     b: String,
     c: [u8; 32],
     d: Vec<u8>,
-    e: HashMap<u8, f64>,
+    e: BTreeMap<u8, f64>,
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -18,7 +18,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         b: "test".to_string(),
         c: [5; 32],
         d: vec![3; 32],
-        e: HashMap::new(),
+        e: BTreeMap::new(),
     };
 
     let hash: [u8; 32] = origin.to_hash::<sha2::Sha256>().into();

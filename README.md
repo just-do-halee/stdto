@@ -56,7 +56,7 @@ struct Test {
     b: String,
     c: [u8; 32],
     d: Vec<u8>,
-    e: HashMap<u8, f64>,
+    e: BTreeMap<String, f64>,
 }
 
 let bytes = Test { .. }.to_bytes();
