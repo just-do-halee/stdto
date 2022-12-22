@@ -19,7 +19,7 @@
 | [Examples](./examples/) | [Docs](https://docs.rs/stdto) | [Latest Note](./CHANGELOG.md) |
 
 ```toml
-stdto = "0.11.0"
+stdto = "0.12.0"
 ```
 
 ## **`Goal`**

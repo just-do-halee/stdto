@@ -2,6 +2,9 @@
 
 ## [unreleased] - ReleaseDate
 
+
+## [0.12.0] - 2022-12-22
+
 ## BREAKING CHANGES
 
 - `DebugBytes` and `DebugHex`, along with all other future debug printing traits, are now printing without including #.
@@ -141,7 +144,9 @@ Released by [@just-do-halee](https://github.com/just-do-halee).
 
 <!-- next-url -->
 
-[unreleased]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.11.0...HEAD
+[unreleased]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.12.0...HEAD
+
+[0.12.0]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.11.0...stdto_core-v0.12.0
 
 [0.11.0]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.10.0...stdto_core-v0.11.0
 
