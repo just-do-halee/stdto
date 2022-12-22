@@ -2,9 +2,10 @@ pub use core::fmt;
 pub use paste::paste;
 pub use proc_macro::TokenStream;
 pub use quote::quote;
+pub use structmeta::StructMeta;
 pub use syn::{
-    parse_macro_input, parse_quote, Attribute, AttributeArgs, DeriveInput, Error, Expr, Lit, Meta,
-    MetaList, MetaNameValue, NestedMeta,
+    parse_macro_input, parse_quote, Attribute, AttributeArgs, DeriveInput, Error, Expr, ImplItem,
+    Lit, LitStr, Meta, MetaList, MetaNameValue, NestedMeta,
 };
 
 pub const ROOT: &str = "stdto";

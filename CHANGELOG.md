@@ -2,9 +2,17 @@
 
 ## [unreleased] - ReleaseDate
 
+## BREAKING CHANGES
+
+- `DebugBytes` and `DebugHex`, along with all other future debug printing traits, are now printing without including #.
+
+## Added
+
+- Added `DebugHash` and `#[debug(hasher = ...)]`.
+
+Released by [@just-do-halee](https://github.com/just-do-halee).
 
 ## [0.11.0] - 2022-12-21
-
 
 ## Improved
 

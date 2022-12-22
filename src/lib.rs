@@ -14,7 +14,7 @@ pub mod prelude {
     #[cfg(feature = "hash")]
     pub use stdto_core::ToHash;
     #[cfg(all(feature = "hash", feature = "derive"))]
-    pub use stdto_derive::ToHash;
+    pub use stdto_derive::{DebugHash, ToHash};
 
     #[cfg(feature = "json")]
     pub use stdto_core::ToJson;

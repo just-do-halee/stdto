@@ -79,10 +79,10 @@ pub fn to_hash(input: TokenStream) -> TokenStream {
 
 #[proc_macro_attribute]
 pub fn hash(_: TokenStream, item: TokenStream) -> TokenStream {
-    let ast = syn::parse_macro_input!(item as syn::DeriveInput);
+    let ast = parse_macro_input!(item as syn::DeriveInput);
     quote! {
-        #[derive(stdto::ToHash)]
-        #ast
+         #[derive(stdto::ToHash)]
+         #ast
     }
     .into()
 }
@@ -115,7 +115,7 @@ pub fn debug_bytes(input: TokenStream) -> TokenStream {
     quote! {
         impl #impl_generics core::fmt::Debug for #name #ty_generics #where_clause {
             fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                write!(f, "#{:?}#", self.to_bytes())
+                write!(f, "{:?}", self.to_bytes())
             }
         }
     }
@@ -131,9 +131,40 @@ pub fn debug_hex(input: TokenStream) -> TokenStream {
         impl #impl_generics core::fmt::Debug for #name #ty_generics #where_clause {
             fn fmt(&self, mut f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
                 use stdto::ToHex;
-                f.write_str("#\"")?;
-                self.to_bytes().try_to_upper_hex_into_with_0x(&mut f).map_err(|_| core::fmt::Error)?;
-                f.write_str("\"#")
+                self.to_bytes().try_to_upper_hex_into_with_0x(&mut f).map_err(|_| core::fmt::Error)
+            }
+        }
+    }
+    .into()
+}
+
+#[derive(StructMeta)]
+struct Debug {
+    hasher: Expr,
+    // mode: Option<Expr>,
+}
+#[proc_macro_derive(DebugHash, attributes(debug))]
+pub fn debug_hash(input: TokenStream) -> TokenStream {
+    let ast = parse_macro_input!(input as DeriveInput);
+    let mut args = None;
+    for attr in &ast.attrs {
+        if attr.path.is_ident("debug") {
+            args = Some(unwrap_error!(attr.parse_args::<Debug>()));
+        }
+    }
+    let Some(args) = args else {
+        return Error::new_spanned(ast, "missing #[debug(hasher = ...)]")
+            .to_compile_error()
+            .into();
+        };
+
+    let name = &ast.ident;
+    let (impl_generics, ty_generics, where_clause) = &ast.generics.split_for_impl();
+    let hasher = args.hasher;
+    quote! {
+        impl #impl_generics core::fmt::Debug for #name #ty_generics #where_clause {
+            fn fmt(&self, mut f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                write!(f, "0x{:02X}", self.to_hash::<#hasher>())
             }
         }
     }
