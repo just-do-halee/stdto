@@ -787,12 +787,10 @@ pub trait ToHex: AsBytes {
     }
     #[inline]
     fn try_from_hex(hex: impl AsBytes) -> Result<Vec<u8>> {
-        let hex = hex.as_byte_slice();
-        let hex = if hex.starts_with(&[b'0', b'x']) {
-            &hex[2..]
-        } else {
-            hex
-        };
+        let mut hex = hex.as_byte_slice();
+        if hex.starts_with(&[b'0', b'x']) {
+            hex = &hex[2..];
+        }
         if hex.len() % 2 != 0 {
             return Err(Error::OddLength);
         }
@@ -808,6 +806,7 @@ pub trait ToHex: AsBytes {
     fn try_from_hex_from(mut reader: impl io::Read) -> Result<Vec<u8>> {
         let mut double = [0u8; 2];
         reader.read_exact(&mut double)?;
+
         let mut v = Vec::new();
         let mut take_into_v = |double: &mut [u8; 2]| -> Result<()> {
             let ch = std::str::from_utf8(double)?;
@@ -841,12 +840,10 @@ pub trait ToHex: AsBytes {
     where
         Self: AsMut<[u8]>,
     {
-        let hex = hex.as_byte_slice();
-        let hex = if hex.starts_with(&[b'0', b'x']) {
-            &hex[2..]
-        } else {
-            hex
-        };
+        let mut hex = hex.as_byte_slice();
+        if hex.starts_with(&[b'0', b'x']) {
+            hex = &hex[2..];
+        }
         if hex.len() % 2 != 0 {
             return Err(Error::OddLength);
         }
