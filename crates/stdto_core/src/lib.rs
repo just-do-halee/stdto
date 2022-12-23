@@ -18,7 +18,7 @@ pub use traits::{AsBytes, ToStringForBytes};
 
 #[cfg(feature = "bytes")]
 pub use crate::{
-    enums::{Endian, HexMode},
+    enums::Endian,
     traits::{ToBytes, ToBytesOptions},
 };
 
@@ -35,4 +35,4 @@ pub use crate::{serde_yaml::Value as YamlValue, traits::ToYaml};
 pub use crate::{serde_toml::Value as TomlValue, traits::ToToml};
 
 #[cfg(feature = "hex")]
-pub use crate::traits::ToHex;
+pub use crate::{enums::HexMode, traits::ToHex};

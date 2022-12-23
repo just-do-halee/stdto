@@ -81,6 +81,7 @@ pub use stdto_core::serde_toml;
 pub use stdto_derive::toml;
 
 // -----------------------------------------------------
+//
 #[cfg(feature = "hex")]
 pub use stdto_core::HexMode;
 

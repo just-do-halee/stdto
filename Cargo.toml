@@ -51,10 +51,13 @@ default = [
 derive = ["dep:stdto_derive"]
 
 serde = ["stdto_core/serde"]
+
 bytes = ["serde", "stdto_core/bytes"]
-hex = ["bytes", "stdto_core/hex"]
 hash = ["bytes", "stdto_core/hash"]
+
 json = ["serde", "stdto_core/json"]
 yaml = ["serde", "stdto_core/yaml"]
 toml = ["serde", "stdto_core/toml"]
 file = ["json", "yaml", "toml"]
+
+hex = ["stdto_core/hex"]

@@ -39,7 +39,7 @@ cargo add stdto --features "derive json" # [derive, serde, json]
 cargo add stdto --features "derive yaml" # [derive, serde, yaml]
 cargo add stdto --features "derive toml" # [derive, serde, toml]
 cargo add stdto --features "derive file" # [derive, serde, json, yaml, toml]
-cargo add stdto --features "derive hex" # [derive, serde, bytes, hex]
+cargo add stdto --features "derive hex" # [derive, hex]
 ```
 
 ## [**`Examples`**](./examples/)

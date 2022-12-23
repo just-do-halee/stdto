@@ -17,13 +17,14 @@ default = ["serde", "bytes", "hash", "json", "yaml", "toml", "file", "hex"]
 serde = ["dep:serde", "serde?/derive"]
 
 bytes = ["serde", "dep:bincode"]
-hex = ["bytes"]
 hash = ["bytes", "dep:digest"]
 
 json = ["serde", "dep:serde_json"]
 yaml = ["serde", "dep:serde_yaml"]
 toml = ["serde", "dep:toml"]
 file = ["json", "yaml", "toml"]
+
+hex = []
 
 [dependencies]
 thiserror = "1.0"

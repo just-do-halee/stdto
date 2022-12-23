@@ -7,6 +7,7 @@
 
 - Default exported `ToStringForBytes` trait.
 - Refactor `ToHex`.
+- Removed the feature `bytes` in the `hex` feature. `hex` is now independent. `hex = []`.
 
 Released by [@just-do-halee](https://github.com/just-do-halee).
 
