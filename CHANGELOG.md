@@ -3,6 +3,13 @@
 ## [unreleased] - ReleaseDate
 
 
+## Improved
+
+- Default exported `ToStringForBytes` trait.
+- Refactor `ToHex`.
+
+Released by [@just-do-halee](https://github.com/just-do-halee).
+
 ## [0.12.0] - 2022-12-22
 
 ## BREAKING CHANGES

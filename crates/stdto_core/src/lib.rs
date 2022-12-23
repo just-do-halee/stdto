@@ -14,12 +14,12 @@ pub extern crate serde_yaml;
 #[cfg(feature = "toml")]
 pub extern crate toml as serde_toml;
 
-pub use traits::AsBytes;
+pub use traits::{AsBytes, ToStringForBytes};
 
 #[cfg(feature = "bytes")]
 pub use crate::{
     enums::{Endian, HexMode},
-    traits::{ToBytes, ToBytesOptions, ToStringForBytes},
+    traits::{ToBytes, ToBytesOptions},
 };
 
 #[cfg(feature = "hash")]

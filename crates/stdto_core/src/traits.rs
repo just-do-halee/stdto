@@ -89,6 +89,53 @@ impl<T: AsRef<[u8]>> AsBytes for T {
     }
 }
 
+/// # A trait for converting a byte slice to a string.
+pub trait ToStringForBytes: AsBytes {
+    #[inline]
+    fn try_as_str(&self) -> Result<&str> {
+        std::str::from_utf8(self.as_byte_slice()).map_err(Error::Utf8)
+    }
+    #[inline]
+    fn try_to_string(&self) -> Result<String> {
+        self.try_as_str().map(|s| s.to_string())
+    }
+    /// # Safety
+    /// This function is unsafe because it does not check if the bytes are valid UTF-8.
+    #[inline]
+    fn as_str(&self) -> &str {
+        self.try_as_str().unwrap()
+    }
+    /// # Safety
+    /// This function is unsafe because it does not check if the bytes are valid UTF-8.
+    #[inline]
+    fn to_string(&self) -> String {
+        self.try_to_string().unwrap()
+    }
+    #[inline]
+    fn to_string_lossy(&self) -> String {
+        String::from_utf8_lossy(self.as_byte_slice()).to_string()
+    }
+    #[inline]
+    fn try_into_string(self) -> Result<String>
+    where
+        Self: Sized,
+    {
+        self.try_to_string()
+    }
+    /// # Safety
+    /// This function is unsafe because it does not check if the bytes are valid UTF-8.
+    #[inline]
+    fn into_string(self) -> String
+    where
+        Self: Sized,
+    {
+        self.to_string()
+    }
+}
+
+/// implement `AsBytes` for `impl AsBytes`
+impl<T: AsBytes> ToStringForBytes for T {}
+
 #[cfg(feature = "bytes")]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct ToBytesOptions {
@@ -946,55 +993,6 @@ pub trait ToHex: AsBytes {
 #[cfg(feature = "hex")]
 /// implement `ToHex` for `impl AsBytes`
 impl<T: AsBytes> ToHex for T {}
-
-#[cfg(feature = "bytes")]
-/// # A trait for converting a byte slice to a string.
-pub trait ToStringForBytes: AsBytes {
-    #[inline]
-    fn try_as_str(&self) -> Result<&str> {
-        std::str::from_utf8(self.as_byte_slice()).map_err(Error::Utf8)
-    }
-    #[inline]
-    fn try_to_string(&self) -> Result<String> {
-        self.try_as_str().map(|s| s.to_string())
-    }
-    /// # Safety
-    /// This function is unsafe because it does not check if the bytes are valid UTF-8.
-    #[inline]
-    fn as_str(&self) -> &str {
-        self.try_as_str().unwrap()
-    }
-    /// # Safety
-    /// This function is unsafe because it does not check if the bytes are valid UTF-8.
-    #[inline]
-    fn to_string(&self) -> String {
-        self.try_to_string().unwrap()
-    }
-    #[inline]
-    fn to_string_lossy(&self) -> String {
-        String::from_utf8_lossy(self.as_byte_slice()).to_string()
-    }
-    #[inline]
-    fn try_into_string(self) -> Result<String>
-    where
-        Self: Sized,
-    {
-        self.try_to_string()
-    }
-    /// # Safety
-    /// This function is unsafe because it does not check if the bytes are valid UTF-8.
-    #[inline]
-    fn into_string(self) -> String
-    where
-        Self: Sized,
-    {
-        self.to_string()
-    }
-}
-
-#[cfg(feature = "bytes")]
-/// implement `AsBytes` for `impl AsBytes`
-impl<T: AsBytes> ToStringForBytes for T {}
 
 #[cfg(test)]
 mod tests {
