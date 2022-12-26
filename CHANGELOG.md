@@ -3,6 +3,9 @@
 ## [unreleased] - ReleaseDate
 
 
+## [0.13.0] - 2022-12-26
+
+
 ## Improved
 
 - Default exported `ToStringForBytes` trait.
@@ -152,7 +155,9 @@ Released by [@just-do-halee](https://github.com/just-do-halee).
 
 <!-- next-url -->
 
-[unreleased]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.12.0...HEAD
+[unreleased]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.13.0...HEAD
+
+[0.13.0]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.12.0...stdto_core-v0.13.0
 
 [0.12.0]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.11.0...stdto_core-v0.12.0
 
