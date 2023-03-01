@@ -2,6 +2,9 @@
 
 ## [unreleased] - ReleaseDate
 
+
+## [0.14.0] - 2023-03-01
+
 ## Added
 
 - Added `ToBorshBytes` and `stdto::borsh_bytes` conversion.
@@ -162,7 +165,9 @@ Released by [@just-do-halee](https://github.com/just-do-halee).
 
 <!-- next-url -->
 
-[unreleased]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.13.0...HEAD
+[unreleased]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.14.0...HEAD
+
+[0.14.0]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.13.0...stdto_core-v0.14.0
 
 [0.13.0]: https://github.com/just-do-halee/stdto/compare/stdto_core-v0.12.0...stdto_core-v0.13.0
 
