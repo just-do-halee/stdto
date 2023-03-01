@@ -1,7 +1,7 @@
 
 [package]
 name = "stdto"
-version = "0.13.0"
+version = "0.14.0"
 edition = "2021"
 authors = ["just-do-halee <just.do.halee@gmail.com>"]
 categories = ["development-tools", "rust-patterns", "encoding"]
