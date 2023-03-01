@@ -7,9 +7,9 @@ pub mod prelude {
     pub use stdto_core::{AsBytes, ToStringForBytes};
 
     #[cfg(feature = "bytes")]
-    pub use stdto_core::ToBytes;
+    pub use stdto_core::{borsh, ToBorshBytes, ToBytes};
     #[cfg(all(feature = "bytes", feature = "derive"))]
-    pub use stdto_derive::{DebugBytes, ToBytes};
+    pub use stdto_derive::{DebugBytes, ToBorshBytes, ToBytes};
 
     #[cfg(feature = "hash")]
     pub use stdto_core::ToHash;
@@ -48,9 +48,9 @@ pub use stdto_derive::serde;
 // -----------------------------------------------------
 
 #[cfg(feature = "bytes")]
-pub use stdto_core::{Endian, ToBytesOptions};
+pub use stdto_core::{borsh, Endian, ToBytesOptions};
 #[cfg(all(feature = "bytes", feature = "derive"))]
-pub use stdto_derive::bytes;
+pub use stdto_derive::{borsh, borsh_bytes, bytes};
 
 // -----------------------------------------------------
 

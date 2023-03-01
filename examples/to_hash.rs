@@ -1,8 +1,10 @@
+use sha2::Digest;
 use std::{collections::BTreeMap, error::Error};
 
 use stdto::prelude::*;
 
 #[stdto::bytes]
+#[stdto::borsh_bytes]
 #[stdto::hash]
 struct Test {
     a: u32,
@@ -28,9 +30,20 @@ fn main() -> Result<(), Box<dyn Error>> {
     ];
     assert_eq!(hash, want);
 
-    use sha2::Digest;
     let mut hasher = sha2::Sha256::new();
     origin.to_hash_into(&mut hasher);
+    let hash: [u8; 32] = hasher.finalize().into();
+    assert_eq!(hash, want);
+
+    let hash: [u8; 32] = origin.to_borsh_hash::<sha2::Sha256>().into();
+    let want = [
+        105, 142, 213, 237, 31, 3, 67, 95, 248, 153, 144, 102, 37, 39, 79, 243, 182, 92, 177, 135,
+        78, 69, 208, 53, 89, 40, 62, 171, 239, 77, 98, 184,
+    ];
+    assert_eq!(hash, want);
+
+    let mut hasher = sha2::Sha256::new();
+    origin.to_borsh_hash_into(&mut hasher);
     let hash: [u8; 32] = hasher.finalize().into();
     assert_eq!(hash, want);
     Ok(())

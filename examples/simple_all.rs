@@ -3,6 +3,7 @@ use std::{collections::BTreeMap, error::Error};
 use stdto::prelude::*;
 
 #[stdto::bytes]
+#[stdto::borsh_bytes]
 #[stdto::hash]
 #[stdto::json]
 #[stdto::yaml]
@@ -27,8 +28,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut all2: All;
 
     let bytes = all.to_bytes();
-    all2 = All::from_bytes(bytes);
+    all2 = All::from_bytes(&bytes);
     assert_eq!(all, all2);
+
+    let borsh_bytes = all.to_borsh_bytes();
+    all2 = All::from_borsh_bytes(&borsh_bytes);
+    assert_eq!(all, all2);
+
+    assert_ne!(bytes, borsh_bytes);
 
     let hash: [u8; 32] = all.to_hash::<sha2::Sha256>().into();
     assert_eq!(

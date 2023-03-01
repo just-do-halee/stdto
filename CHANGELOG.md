@@ -2,6 +2,13 @@
 
 ## [unreleased] - ReleaseDate
 
+## Added
+
+- Added `ToBorshBytes` and `stdto::borsh_bytes` conversion.
+- Added `to_borsh_hash` in `ToHash` trait.
+- Added `stdto::borsh` that is like `stdto::serde`.
+
+Released by [@just-do-halee](https://github.com/just-do-halee).
 
 ## [0.13.0] - 2022-12-26
 

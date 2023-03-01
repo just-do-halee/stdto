@@ -15,7 +15,7 @@ impl fmt::Display for Endian {
 
 #[derive(Default)]
 pub struct ToBytesOptions {
-    endian: Endian,
+    pub endian: Endian,
 }
 impl TryFrom<AttributeArgs> for ToBytesOptions {
     type Error = Error;
@@ -43,7 +43,10 @@ impl TryFrom<AttributeArgs> for ToBytesOptions {
                     }
                 }
                 _ => {
-                    return Err(Error::new_spanned(arg, "expected `endian = \"...\"`"));
+                    return Err(Error::new_spanned(
+                        arg,
+                        "expected `endian = \"...\"` or borsh",
+                    ));
                 }
             }
         }
@@ -52,7 +55,7 @@ impl TryFrom<AttributeArgs> for ToBytesOptions {
 }
 impl ToBytesOptions {
     pub fn to_expr(&self) -> Expr {
-        let Self { endian } = self;
+        let Self { endian, .. } = self;
         syn::parse_str(&format!("stdto::ToBytesOptions {{ endian: {endian} }}")).unwrap()
     }
 }

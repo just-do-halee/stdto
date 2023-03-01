@@ -36,6 +36,33 @@ pub fn serde(_: TokenStream, item: TokenStream) -> TokenStream {
     quote!(#ast).into()
 }
 
+#[proc_macro_attribute]
+pub fn borsh(_: TokenStream, item: TokenStream) -> TokenStream {
+    let mut ast = syn::parse_macro_input!(item as syn::DeriveInput);
+    let mut has_serialize = false;
+    let mut has_deserialize = false;
+    for attr in &ast.attrs {
+        if attr.path.is_ident("derive") {
+            let tokens = attr.tokens.to_string();
+            if tokens.contains("BorshSerialize") {
+                has_serialize = true;
+            }
+            if tokens.contains("BorshDeserialize") {
+                has_deserialize = true;
+            }
+        }
+    }
+    if !has_serialize {
+        ast.attrs
+            .push(parse_quote! { #[derive(stdto::borsh::BorshSerialize)] });
+    }
+    if !has_deserialize {
+        ast.attrs
+            .push(parse_quote! { #[derive(stdto::borsh::BorshDeserialize)] });
+    }
+    quote!(#ast).into()
+}
+
 #[proc_macro_derive(ToBytes)]
 pub fn to_bytes(input: TokenStream) -> TokenStream {
     let ast = parse_macro_input!(input as DeriveInput);
@@ -65,6 +92,31 @@ pub fn bytes(attr: TokenStream, item: TokenStream) -> TokenStream {
     .into()
 }
 
+#[proc_macro_derive(ToBorshBytes)]
+pub fn to_borsh_bytes(input: TokenStream) -> TokenStream {
+    let ast = parse_macro_input!(input as DeriveInput);
+    let name = &ast.ident;
+    let (impl_generics, ty_generics, where_clause) = &ast.generics.split_for_impl();
+    quote! {
+        impl #impl_generics stdto::ToBorshBytes for #name #ty_generics #where_clause {
+        }
+    }
+    .into()
+}
+
+#[proc_macro_attribute]
+pub fn borsh_bytes(_: TokenStream, item: TokenStream) -> TokenStream {
+    let item = impl_attribute_with_borsh(item, None);
+    let ast = parse_macro_input!(item as DeriveInput);
+    let name = &ast.ident;
+    let (impl_generics, ty_generics, where_clause) = &ast.generics.split_for_impl();
+    quote! {
+        #ast
+        impl #impl_generics stdto::ToBorshBytes for #name #ty_generics #where_clause {
+        }
+    }
+    .into()
+}
 #[proc_macro_derive(ToHash)]
 pub fn to_hash(input: TokenStream) -> TokenStream {
     let ast = syn::parse_macro_input!(input as syn::DeriveInput);
@@ -101,6 +153,22 @@ fn impl_attribute_with_serde(item: TokenStream, attribute: Option<Attribute>) ->
     }
     let serde: Attribute = parse_quote!(#[stdto::serde]);
     ast.attrs.insert(0, serde);
+    if let Some(v) = attribute {
+        ast.attrs.push(v);
+    }
+    quote!(#ast).into()
+}
+
+fn impl_attribute_with_borsh(item: TokenStream, attribute: Option<Attribute>) -> TokenStream {
+    let mut ast = syn::parse_macro_input!(item as syn::DeriveInput);
+    if ast.attrs.iter().any(|x| x.path.is_ident("borsh")) {
+        if let Some(attribute) = attribute {
+            ast.attrs.push(attribute);
+        }
+        return quote!(#ast).into();
+    }
+    let borsh: Attribute = parse_quote!(#[stdto::borsh]);
+    ast.attrs.insert(0, borsh);
     if let Some(v) = attribute {
         ast.attrs.push(v);
     }

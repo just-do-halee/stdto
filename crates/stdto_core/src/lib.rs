@@ -3,6 +3,8 @@ mod traits;
 
 pub mod error;
 
+#[cfg(feature = "bytes")]
+pub extern crate borsh;
 #[cfg(feature = "hash")]
 pub extern crate digest;
 #[cfg(feature = "serde")]
@@ -19,7 +21,7 @@ pub use traits::{AsBytes, ToStringForBytes};
 #[cfg(feature = "bytes")]
 pub use crate::{
     enums::Endian,
-    traits::{ToBytes, ToBytesOptions},
+    traits::{ToBorshBytes, ToBytes, ToBytesOptions},
 };
 
 #[cfg(feature = "hash")]

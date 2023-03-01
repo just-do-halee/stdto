@@ -6,6 +6,8 @@ use crate::{
 };
 use std::{fmt, io};
 
+use borsh::{BorshDeserialize, BorshSerialize};
+
 #[cfg(feature = "serde")]
 use serde::{de::DeserializeOwned, Serialize};
 
@@ -407,15 +409,83 @@ pub trait ToBytes {
     {
         Self::try_from_bytes_from(reader).unwrap()
     }
+
+    // ----------------------------------------------------------------------
+}
+
+#[cfg(feature = "bytes")]
+pub trait ToBorshBytes {
+    /// BorshSerialize to bytes.
+    #[inline]
+    fn try_to_borsh_bytes(&self) -> Result<Vec<u8>>
+    where
+        Self: BorshSerialize,
+    {
+        self.try_to_vec().map_err(Error::Io)
+    }
+    #[inline]
+    fn try_to_borsh_bytes_into(&self, mut writer: impl io::Write) -> Result<()>
+    where
+        Self: BorshSerialize,
+    {
+        self.serialize(&mut writer).map_err(Error::Io)
+    }
+    // ---------------------
+    #[inline]
+    fn to_borsh_bytes(&self) -> Vec<u8>
+    where
+        Self: BorshSerialize,
+    {
+        self.try_to_borsh_bytes().unwrap()
+    }
+    #[inline]
+    fn to_borsh_bytes_into(&self, writer: impl io::Write)
+    where
+        Self: BorshSerialize,
+    {
+        self.try_to_borsh_bytes_into(writer).unwrap()
+    }
+    // ---------------------
+
+    /// BorshDeserialize from bytes.
+    #[inline]
+    fn try_from_borsh_bytes(bytes: impl AsBytes) -> Result<Self>
+    where
+        Self: BorshDeserialize,
+    {
+        BorshDeserialize::try_from_slice(bytes.as_byte_slice()).map_err(Error::Io)
+    }
+    #[inline]
+    fn try_from_borsh_bytes_from(mut reader: impl io::Read) -> Result<Self>
+    where
+        Self: BorshDeserialize,
+    {
+        BorshDeserialize::try_from_reader(&mut reader).map_err(Error::Io)
+    }
+    // ---------------------
+    #[inline]
+    fn from_borsh_bytes(bytes: impl AsBytes) -> Self
+    where
+        Self: BorshDeserialize,
+    {
+        Self::try_from_borsh_bytes(bytes).unwrap()
+    }
+    #[inline]
+    fn from_borsh_bytes_from(reader: impl io::Read) -> Self
+    where
+        Self: BorshDeserialize,
+    {
+        Self::try_from_borsh_bytes_from(reader).unwrap()
+    }
 }
 
 #[cfg(feature = "hash")]
 /// # A trait that can hash bytes.
-pub trait ToHash: ToBytes {
+pub trait ToHash {
     #[inline]
     fn try_to_hash<T: Digest + io::Write>(&self) -> Result<Output<T>>
     where
-        Self: Serialize,
+        Self: ToBytes + Serialize,
     {
         let mut hasher = T::new();
         self.try_to_hash_into(&mut hasher)?;
@@ -424,14 +494,14 @@ pub trait ToHash: ToBytes {
     #[inline]
     fn try_to_hash_into<T: Digest + io::Write>(&self, hasher: &mut T) -> Result<()>
     where
-        Self: Serialize,
+        Self: ToBytes + Serialize,
     {
         self.try_to_bytes_into(hasher)
     }
     #[inline]
     fn to_hash<T: Digest + io::Write>(&self) -> Output<T>
     where
-        Self: Serialize,
+        Self: ToBytes + Serialize,
     {
         let mut hasher = T::new();
         self.to_hash_into(&mut hasher);
@@ -440,9 +510,43 @@ pub trait ToHash: ToBytes {
     #[inline]
     fn to_hash_into<T: Digest + io::Write>(&self, hasher: &mut T)
     where
-        Self: Serialize,
+        Self: ToBytes + Serialize,
     {
         self.to_bytes_into(hasher)
+    }
+
+    // Borsh
+    #[inline]
+    fn try_to_borsh_hash<T: Digest + io::Write>(&self) -> Result<Output<T>>
+    where
+        Self: ToBorshBytes + BorshSerialize,
+    {
+        let mut hasher = T::new();
+        self.try_to_borsh_hash_into(&mut hasher)?;
+        Ok(hasher.finalize())
+    }
+    #[inline]
+    fn try_to_borsh_hash_into<T: Digest + io::Write>(&self, hasher: &mut T) -> Result<()>
+    where
+        Self: ToBorshBytes + BorshSerialize,
+    {
+        self.try_to_borsh_bytes_into(hasher)
+    }
+    #[inline]
+    fn to_borsh_hash<T: Digest + io::Write>(&self) -> Output<T>
+    where
+        Self: ToBorshBytes + BorshSerialize,
+    {
+        let mut hasher = T::new();
+        self.to_borsh_hash_into(&mut hasher);
+        hasher.finalize()
+    }
+    #[inline]
+    fn to_borsh_hash_into<T: Digest + io::Write>(&self, hasher: &mut T)
+    where
+        Self: ToBorshBytes + BorshSerialize,
+    {
+        self.to_borsh_bytes_into(hasher)
     }
 }
 
